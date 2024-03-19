@@ -3,12 +3,20 @@
 <template>
   <div class="main flex gap-1 text-white flex-col bg-[#161618] h-full">
     <!-- 头部 -->
-    <header class="header flex bg-[#282c34] p-8 gap-8">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
+    <header class="flex justify-between bg-[#282c34] items-center h-[50px] px-6">
+      <div class="flex gap-2 items-center">
+        <!-- logo -->
+        <img src="../assets/logo.svg" alt="" class="h-[20px]" />
+        <!-- title -->
+        <h1 class="text-xl font-bold">Video Studio</h1>
+        <span>( 开发中... )</span>
+      </div>
+      <div class="flex items-center">
         <RouterLink to="/about">About</RouterLink>
-      </nav>
-      <p>这是一个基于 web 端的视频编辑器，正在开发中。</p>
+        <a href="https://github.com/wangrongding/video-studio" target="_blank" class="ml-4">
+          <img src="../assets/github.svg" alt="" class="h-[20px]" />
+        </a>
+      </div>
     </header>
 
     <div class="flex gap-1 flex-1">
