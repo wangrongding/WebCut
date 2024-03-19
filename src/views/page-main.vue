@@ -1,97 +1,30 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="main">
+  <div class="main flex gap-1 text-white flex-col bg-[#161618] h-full">
     <!-- 头部 -->
-    <header class="header">
+    <header class="header flex bg-[#282c34] p-8 gap-8">
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
       <p>这是一个基于 web 端的视频编辑器，正在开发中。</p>
     </header>
-    <!-- 主体 -->
-    <div class="container">
+
+    <div class="flex gap-1 flex-1">
       <!-- 左边栏 -->
-      <div class="left-box">left-box</div>
+      <div class="left-box bg-[#282c34] p-8 w-[400px]">left-box</div>
       <!-- 内容区域 -->
-      <div class="right-box">
-        <!-- 画布 -->
-        <div class="center-box">
-          <div class="player">player</div>
-          <div class="right-panel">right-panel</div>
+      <div class="flex-col flex gap-1 flex-1">
+        <div class="flex gap-1 flex-1">
+          <!-- 画布 -->
+          <div class="flex-1 bg-[#282c34] p-8">player</div>
+          <!-- 右边栏 -->
+          <div class="right-panel bg-[#282c34] p-8 w-[300px]">right-panel</div>
         </div>
         <!-- 底部栏 -->
-        <div class="bottom-panel">bottom-panel</div>
+        <div class="bottom-panel bg-[#282c34] p-8 h-[300px]">bottom-panel</div>
       </div>
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.main {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  background-color: beige;
-
-  .header {
-    display: flex;
-    gap: 20px;
-    background-color: #282c34;
-    color: white;
-    padding: 20px;
-  }
-
-  .container {
-    flex: 1;
-    display: flex;
-
-    .left-box {
-      width: 400px;
-      background-color: #24272c;
-      color: white;
-      padding: 20px;
-      height: 100%;
-      border: 2px solid #b6bbc6;
-    }
-
-    .right-box {
-      width: 100%;
-      height: 100%;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      .center-box {
-        flex: 1;
-        display: flex;
-        .right-panel {
-          width: 300px;
-          background-color: #24272c;
-          color: white;
-          padding: 20px;
-          height: 100%;
-          border: 2px solid #b6bbc6;
-        }
-        .player {
-          flex: 1;
-          background-color: #24272c;
-          color: white;
-          padding: 20px;
-          height: 100%;
-          border: 2px solid #b6bbc6;
-        }
-      }
-
-      .bottom-panel {
-        background-color: #24272c;
-        color: white;
-        padding: 20px;
-        border: 2px solid #b6bbc6;
-        height: 300px;
-      }
-    }
-  }
-}
-</style>
