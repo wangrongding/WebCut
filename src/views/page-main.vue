@@ -1,16 +1,16 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="main flex gap-1 text-white flex-col bg-[#161618] h-full">
+  <div class="main flex h-full flex-col gap-1 bg-[#161618] text-white">
     <!-- 头部 -->
-    <header class="flex justify-between bg-[#282c34] items-center h-[50px] px-6">
-      <div class="flex gap-2 items-center">
-        <!-- logo -->
+    <header class="flex h-[50px] items-center justify-between bg-[#282c34] px-6">
+      <!-- logo -->
+      <div class="flex items-center gap-2">
         <img src="../assets/logo.svg" alt="" class="h-[20px]" />
-        <!-- title -->
         <h1 class="text-xl font-bold">Video Studio</h1>
         <span>( 开发中... )</span>
       </div>
+
       <div class="flex items-center">
         <RouterLink to="/about">About</RouterLink>
         <a href="https://github.com/wangrongding/video-studio" target="_blank" class="ml-4">
@@ -19,19 +19,21 @@
       </div>
     </header>
 
-    <div class="flex gap-1 flex-1">
+    <div class="flex flex-1 gap-1">
       <!-- 左边栏 -->
-      <div class="left-box bg-[#282c34] p-8 w-[400px]">left-box</div>
+      <div class="left-box w-[400px] bg-[#282c34] p-8">left-box</div>
+
       <!-- 内容区域 -->
-      <div class="flex-col flex gap-1 flex-1">
-        <div class="flex gap-1 flex-1">
-          <!-- 画布 -->
+      <div class="flex flex-1 flex-col gap-1">
+        <div class="flex flex-1 gap-1">
+          <!-- 视频画布 -->
           <div class="flex-1 bg-[#282c34] p-8">player</div>
-          <!-- 右边栏 -->
-          <div class="right-panel bg-[#282c34] p-8 w-[300px]">right-panel</div>
+          <!-- 右边属性设置栏 -->
+          <div class="right-panel w-[300px] bg-[#282c34] p-8">right-panel</div>
         </div>
-        <!-- 底部栏 -->
-        <div class="bottom-panel bg-[#282c34] p-8 h-[300px]">bottom-panel</div>
+
+        <!-- 底部轨道栏 -->
+        <div class="bottom-panel h-[300px] bg-[#282c34] p-8">bottom-panel</div>
       </div>
     </div>
   </div>
