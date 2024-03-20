@@ -6,9 +6,8 @@
     <header class="flex h-[50px] items-center justify-between bg-[#282c34] px-6">
       <!-- logo -->
       <div class="flex items-center gap-2">
-        <img src="../assets/logo.svg" alt="" class="h-[20px]" />
-        <h1 class="text-xl font-bold">Video Studio</h1>
-        <span>( 开发中... )</span>
+        <span class="logo">👀</span>
+        <h1 class="title text-xl font-bold">Video Studio</h1>
       </div>
 
       <div class="flex items-center">
@@ -21,20 +20,47 @@
 
     <div class="flex flex-1 gap-1">
       <!-- 左边栏 -->
-      <div class="left-box w-[400px] bg-[#282c34] p-8">left-box</div>
+      <div class="left-box w-[400px] bg-[#282c34] p-8">
+        left-box
+        <span>( 开发中... )</span>
+      </div>
 
       <!-- 内容区域 -->
       <div class="flex flex-1 flex-col gap-1">
         <div class="flex flex-1 gap-1">
           <!-- 视频画布 -->
-          <div class="flex-1 bg-[#282c34] p-8">player</div>
+          <div class="flex-1 bg-[#282c34] p-8">
+            player
+            <span>( 开发中... )</span>
+          </div>
           <!-- 右边属性设置栏 -->
-          <div class="right-panel w-[300px] bg-[#282c34] p-8">right-panel</div>
+          <div class="right-panel w-[300px] bg-[#282c34] p-8">
+            right-panel
+            <span>( 开发中... )</span>
+          </div>
         </div>
 
         <!-- 底部轨道栏 -->
-        <div class="bottom-panel h-[300px] bg-[#282c34] p-8">bottom-panel</div>
+        <div class="bottom-panel h-[300px] bg-[#282c34] p-8">
+          bottom-panel
+          <span>( 开发中... )</span>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
+<style>
+.logo,
+.title {
+  width: fit-content;
+  user-select: none;
+  background: -webkit-linear-gradient(0deg, #ee2788 0%, #00a7ea 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+</style>
