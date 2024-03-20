@@ -1,0 +1,30 @@
+name: Production Tag Deployment
+env:
+  # 通过命令行，vercel login > vercel link 后，在项目根目录生成的 .vercel/project.json 文件中获取
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:
+      - '*' # Push events to every tag not containing /
+jobs:
+  Deploy-Production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Pnpm
+        run: npm install --global pnpm@latest
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      # 创建 Vercel Token : https://vercel.com/account/tokens
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+# 注意：以上的 secrets 变量需要在项目的 Settings -> Secrets 中添加
