@@ -44,5 +44,7 @@ module.exports = {
     'no-else-return': ['error', { allowElseIf: true }],
     // 禁止在非全等比较中与 null 进行比较, 应该使用 === 或 !== （因为 null == undefined 为 true）
     'no-eq-null': 'error',
+    // ===================================== vue =====================================
+    'vue/multi-word-component-names': 'off', // 关闭组件名称多单词限制
   }
 }
