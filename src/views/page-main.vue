@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="main flex h-full flex-col gap-1 bg-[#161618] text-white">
+  <div class="main flex h-full select-none flex-col gap-1 bg-[#161618] text-white">
     <!-- 头部 -->
     <header class="flex h-[50px] items-center justify-between bg-[#282c34] px-6">
       <!-- logo -->
@@ -21,7 +21,7 @@
     <div class="flex flex-1 gap-1">
       <!-- 左边栏 -->
       <div class="left-box w-[400px] bg-[#282c34] p-8">
-        left-box
+        left-panel
         <span>( 开发中... )</span>
       </div>
 
