@@ -1,7 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import CanvasPlayer from '~/components/player/CanvasPlayer.vue'
+
+onMounted(() => {
+  // 禁止右键菜单
+  document.oncontextmenu = () => false
+  // onselectstart事件禁用网页上选取的内容
+  document.onselectstart = () => false
+})
+</script>
 
 <template>
-  <div class="main flex h-full select-none flex-col gap-1 bg-[#161618] text-white">
+  <div class="main flex h-full flex-col gap-1 bg-[#161618] text-white">
     <!-- 头部 -->
     <header class="flex h-[50px] items-center justify-between bg-[#282c34] px-6">
       <!-- logo -->
@@ -20,7 +30,7 @@
 
     <div class="flex flex-1 gap-1">
       <!-- 左边栏 -->
-      <div class="left-box w-[400px] bg-[#282c34] p-8">
+      <div class="left-box w-[400px] min-w-[300px] bg-[#282c34] p-8">
         left-panel
         <span>( 开发中... )</span>
       </div>
@@ -29,9 +39,8 @@
       <div class="flex flex-1 flex-col gap-1">
         <div class="flex flex-1 gap-1">
           <!-- 视频画布 -->
-          <div class="flex-1 bg-[#282c34] p-8">
-            player
-            <span>( 开发中... )</span>
+          <div class="canvas-player-container flex-1 bg-[#282c34] p-8">
+            <CanvasPlayer msg="hello" />
           </div>
           <!-- 右边属性设置栏 -->
           <div class="right-panel w-[300px] bg-[#282c34] p-8">
