@@ -1,7 +1,5 @@
-# video-studio
+# WebCut
 
+开发中（Stay tuned）...
 
-开发中（Stay tuned）...  
-
-线上地址（address）：  [vs.fedtop.com](https://vs.fedtop.com)
-
+线上地址（address）： [webcut.cn](https://webcut.cn)

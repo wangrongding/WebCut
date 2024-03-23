@@ -21,7 +21,7 @@ onMounted(() => {
 
       <div class="flex items-center">
         <RouterLink to="/about">About</RouterLink>
-        <a href="https://github.com/wangrongding/video-studio" target="_blank" class="ml-4">
+        <a href="https://github.com/wangrongding/WebCut" target="_blank" class="ml-4">
           <img src="../assets/github.svg" alt="" class="h-[20px]" />
         </a>
       </div>
