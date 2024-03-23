@@ -2,6 +2,7 @@
 import { fabric } from 'fabric'
 import { onMounted, ref } from 'vue'
 import Logo from '~/assets/github.svg'
+import movie from '/bird.mp4'
 
 defineProps<{
   msg: string
@@ -23,8 +24,8 @@ function initCanvas() {
 }
 
 function drawElements() {
-  drawStaticElements()
   drawVideo()
+  drawStaticElements()
   canvas.renderAll()
 }
 
@@ -34,20 +35,22 @@ function drawStaticElements() {
   fabric.loadSVGFromURL(Logo, (objects, options) => {
     const obj = fabric.util.groupSVGElements(objects, options)
     obj.set({
-      scaleX: 5,
-      scaleY: 5,
-      left: canvas.width! / 2 - (obj.width! * 5) / 2,
-      top: canvas.height! / 2 - (obj.height! * 5) / 2,
+      scaleX: 2,
+      scaleY: 2,
+      left: 300,
+      top: 20,
+      // left: canvas.width! / 2 - (obj.width! * 5) / 2,
+      // top: canvas.height! / 2 - (obj.height! * 5) / 2,
       angle: 0
     })
     canvas.add(obj)
   })
   // 添加文字
   const text = new fabric.Text('开发中...', {
-    left: 100,
-    top: 100,
+    left: 20,
+    top: 20,
     fill: 'white',
-    fontSize: 30
+    fontSize: 20
   })
   canvas.add(text)
 }
@@ -55,8 +58,8 @@ function drawStaticElements() {
 // 绘制视频
 function drawVideo() {
   const video = document.createElement('video')
-  video.src = 'https://assets.fedtop.com/picbed/movie.mp4'
-
+  // video.src = 'https://assets.fedtop.com/picbed/movie.mp4'
+  video.src = movie
   video.autoplay = true
   video.loop = true
   // 不静音就无法在未点击的情况下自动播放
