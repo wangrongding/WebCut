@@ -14,9 +14,8 @@ onMounted(() => {
   <div class="main flex h-full flex-col gap-1 bg-[#161618] text-white">
     <!-- 头部 -->
     <header class="flex h-[50px] items-center justify-between bg-[#282c34] px-6">
-      <!-- logo -->
       <div class="flex items-center gap-2">
-        <span class="logo">👀</span>
+        <img src="/favicon.svg" alt="" class="logo h-[20px] w-[20px]" />
         <h1 class="title text-xl font-bold">Video Studio</h1>
       </div>
 
