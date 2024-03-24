@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
 import main from '../views/main-page.vue'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,9 +10,9 @@ const router = createRouter({
       component: main
     },
     {
-      path: '/frame',
-      name: 'frame',
-      component: () => import('../views/video-frame.vue')
+      path: '/video-clip',
+      name: 'video-clip',
+      component: () => import('../views/video-clip.vue')
     },
     {
       path: '/about',

@@ -20,6 +20,7 @@ onMounted(() => {
       </div>
 
       <div class="flex items-center">
+        <RouterLink to="/video-clip">Video Clip</RouterLink>
         <RouterLink to="/about">About</RouterLink>
         <a href="https://github.com/wangrongding/WebCut" target="_blank" class="ml-4">
           <img src="../assets/github.svg" alt="" class="h-[20px]" />
