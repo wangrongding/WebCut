@@ -2,7 +2,8 @@
  * @type {import('prettier').Options}
  */
 module.exports = {
-  plugins: [require.resolve("prettier-plugin-tailwindcss")],
+  plugins: [require.resolve("prettier-plugin-tailwindcss"), require.resolve('@trivago/prettier-plugin-sort-imports')],
+  "importOrderSeparation": true,
   tailwindConfig: './tailwind.config.js',
 
   semi: false, // 是否在语句末尾打印分号
