@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import TrackList from './TrackList.vue'
-import mitt from 'mitt'
 import { storeToRefs } from 'pinia'
 import IconCopy from '~/assets/icons/control-copy.svg?component'
 import IconCut from '~/assets/icons/control-cut.svg?component'
@@ -20,10 +19,8 @@ const playerStore = usePlayerStore()
 // 将 store 中的 playStatus 转换为 ref
 const { playStatus } = storeToRefs(playerStore)
 
-const emitter = mitt()
 function toggleVideoPlay() {
   playerStore.playStatus = !playStatus.value
-  // emitter.emit('player:toggle-play')
 }
 </script>
 <template>
