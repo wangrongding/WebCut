@@ -1,15 +1,33 @@
 <script setup lang="ts">
 import movie from '/bird.mp4'
 import { fabric } from 'fabric'
-import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { onMounted, ref, watch } from 'vue'
 import Logo from '~/assets/icons/icon-github.svg'
+import { usePlayerStore } from '~/stores/player'
+import emitter from '~/utils/bus'
 
 defineProps<{
   msg: string
 }>()
+const container = ref<HTMLElement | null>(null)
+let video: HTMLVideoElement
+const playerStore = usePlayerStore()
+const { playStatus } = storeToRefs(playerStore)
+
 let canvas: fabric.Canvas
 let ctx: CanvasRenderingContext2D
-const container = ref<HTMLElement | null>(null)
+let clipboard: fabric.Object | null = null
+
+emitter.on('element:copy', onCopy)
+emitter.on('element:paste', onPaste)
+watch(playStatus, () => {
+  if (playStatus.value) {
+    video.play()
+  } else {
+    video.pause()
+  }
+})
 
 function initCanvas() {
   canvas = new fabric.Canvas('canvas', {
@@ -58,13 +76,10 @@ function drawStaticElements() {
 // 绘制视频
 // TODO 需要实现通过 webcodecs 进行视频解码后绘制
 function drawVideo() {
-  const video = document.createElement('video')
+  video = document.createElement('video')
   // video.src = 'https://assets.fedtop.com/picbed/movie.mp4'
   video.src = movie
-  video.autoplay = true
   video.loop = true
-  // 不静音就无法在未点击的情况下自动播放
-  video.muted = true
   const canvasWidth = canvas.width!
   const canvasHeight = canvas.height!
 
@@ -89,8 +104,6 @@ function drawVideo() {
     canvas.add(videoElement)
     canvas.setActiveObject(videoElement)
     continuouslyRepaint()
-    // TODO 修改成外部控制
-    video.play()
   })
 }
 
@@ -151,6 +164,7 @@ function initControls() {
   // 添加删除按钮
   addDeleteButton()
 }
+
 // editor 添加删除按钮
 function addDeleteButton() {
   // 有些地方也有用 fabric.Object.prototype.controls.delete
@@ -199,6 +213,45 @@ function resizePlayer() {
 }
 
 function canvasOnMouseDown() {}
+
+// 复制元素
+function onCopy() {
+  const activeObject = canvas.getActiveObject()
+  if (!activeObject) return
+  activeObject.clone((cloned: fabric.Object) => {
+    clipboard = cloned
+  })
+}
+
+// TODO 视频元素为什么无法复制
+// 粘贴元素
+function onPaste() {
+  if (clipboard === null) return
+  // clone again, so you can do multiple copies.
+  clipboard!.clone((clonedObj: any) => {
+    canvas.discardActiveObject()
+    clonedObj.set({
+      left: clonedObj.left + 10,
+      top: clonedObj.top + 10,
+      evented: true
+    })
+    if (clonedObj.type === 'activeSelection') {
+      // active selection needs a reference to the canvas.
+      clonedObj.canvas = canvas
+      clonedObj.forEachObject((obj: any) => {
+        canvas.add(obj)
+      })
+      // this should solve the unselectability
+      clonedObj.setCoords()
+    } else {
+      canvas.add(clonedObj)
+    }
+    clipboard!.top! += 10
+    clipboard!.left! += 10
+    canvas.setActiveObject(clonedObj)
+    canvas.requestRenderAll()
+  })
+}
 
 onMounted((): void => {
   // 初始化画布
