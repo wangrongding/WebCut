@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import IconExport from '~/assets/icons/icon-export.svg?component'
+import IconGithub from '~/assets/icons/icon-github.svg?component'
 import BottomPanel from '~/components/bottom-panel/BottomPanel.vue'
 import LeftPanel from '~/components/left-panel/LeftPanel.vue'
 import CanvasPlayer from '~/components/player/CanvasPlayer.vue'
@@ -20,6 +22,7 @@ onMounted(() => {
       <div class="flex items-center gap-2">
         <img src="/favicon.svg" alt="" class="logo h-[20px] w-[20px]" />
         <h1 class="title text-xl font-bold">WebCut</h1>
+        <!-- TODO 名字感觉很一般，是否还需要再换？ -->
         <!-- <h1 class="title text-xl font-bold">Video Studio</h1> -->
       </div>
 
@@ -28,24 +31,11 @@ onMounted(() => {
         <RouterLink to="/about" class="link link-info">About</RouterLink>
 
         <a href="https://github.com/wangrongding/WebCut" target="_blank">
-          <img src="../assets/github.svg" alt="" class="h-[20px]" />
+          <IconGithub class="h-[20px] w-[20px]" />
         </a>
 
         <button class="btn btn-sm">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
+          <IconExport />
           导出
         </button>
       </div>
