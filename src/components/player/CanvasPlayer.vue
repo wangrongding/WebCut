@@ -2,7 +2,7 @@
 import movie from '/bird.mp4'
 import { fabric } from 'fabric'
 import { onMounted, ref } from 'vue'
-import Logo from '~/assets/github.svg'
+import Logo from '~/assets/icons/icon-github.svg'
 
 defineProps<{
   msg: string
