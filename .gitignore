@@ -30,6 +30,3 @@ coverage
 *.tsbuildinfo
 
 .vercel
-
-# temp ignore
-bus.ts
