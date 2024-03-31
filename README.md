@@ -1,14 +1,16 @@
 # WebCut
 
-本项目将使用纯 Web 技术构建音视频编辑工具。
+[中文 README](README-zh.md)
 
-目前正在开发中（Stay tuned）...  
-提前体验👉🏻： [webcut.cn](https://webcut.cn)
+This project aims to build a web-based audio and video editing tool using pure web technologies.
 
-在此之前，前端开发会在有限的场景使用 ffmpeg.wasm。  
-Chrome 94 开放了 WebCodecs API， 该 api 提供对浏览器中已有编解码器的访问。它可以访问原始视频帧，音频数据块，图像解码器，音频和视频编码器和解码器。
+Currently under development (Stay tuned)...  
+Early access👉🏻: [webcut.cn](https://webcut.cn)
 
-这意味着 JS 也可以处理音视频了，并且你不再需要增加带宽以下载浏览器中已有的编解码器。  
-且经过简单的测试发现 WebCodecs 性能比 ffmpeg.wasm 好非常多。
+Before that, the frontend development will use ffmpeg.wasm in limited scenarios.  
+Chrome 94 introduced the WebCodecs API, which provides access to existing codecs in the browser. It can access raw video frames, audio data blocks, image decoders, audio and video encoders and decoders.
 
-🌸 开源不易，star 鼓励 ⭐️
+This means that JavaScript can now handle audio and video, and you no longer need to increase bandwidth to download existing codecs in the browser.  
+And after simple testing, it was found that WebCodecs performs much better than ffmpeg.wasm.
+
+🌸 Open source is not easy, star to encourage ⭐️
