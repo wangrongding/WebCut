@@ -31,9 +31,9 @@ watch(playStatus, () => {
 
 function initCanvas() {
   canvas = new fabric.Canvas('canvas', {
-    selection: true,
-    hoverCursor: 'pointer',
-    backgroundColor: '#000'
+    selection: true, // 是否开启选择
+    hoverCursor: 'pointer', // 鼠标悬停时的样式
+    backgroundColor: '#000' // 画布背景色
   })
   resizePlayer()
   canvas.on('mouse:down', canvasOnMouseDown)
@@ -41,6 +41,9 @@ function initCanvas() {
   drawElements()
 }
 
+function canvasOnMouseDown() {}
+
+// 绘制元素
 function drawElements() {
   drawVideo()
   drawStaticElements()
@@ -212,8 +215,6 @@ function resizePlayer() {
   })
 }
 
-function canvasOnMouseDown() {}
-
 // 复制元素
 function onCopy() {
   const activeObject = canvas.getActiveObject()
@@ -221,6 +222,14 @@ function onCopy() {
   activeObject.clone((cloned: fabric.Object) => {
     clipboard = cloned
   })
+}
+
+// 剪切元素
+function onCut() {
+  const activeObject = canvas.getActiveObject()
+  if (!activeObject) return
+  onCopy()
+  canvas.remove(activeObject)
 }
 
 // TODO 视频元素为什么无法复制
@@ -258,6 +267,13 @@ onMounted((): void => {
   initCanvas()
   // 初始化控件
   initControls()
+
+  // oncopy事件禁用复制;
+  document.oncopy = onCopy
+  // onpaste事件禁用粘贴
+  document.onpaste = onPaste
+  // oncut事件禁用剪切
+  document.oncut = onCut
 })
 </script>
 <template>
