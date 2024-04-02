@@ -14,9 +14,29 @@ onMounted(() => {
   document.onselectstart = () => false
   // 禁止缩放
   document.addEventListener('mousewheel', (event: Event) => event.preventDefault(), {
-    capture: false,
-    passive: false
+    capture: false, // 是否在捕获阶段执行
+    passive: false // 是否是一个被动的监听器
   })
+
+  // 禁用浏览器ctrl +- 缩放
+  const keyCodeMap = [
+    91, // command
+    61,
+    107, // 数字键盘 +
+    109, // 数字键盘 -
+    173, // 火狐 - 号
+    187, // +
+    189 // -
+  ]
+  // 覆盖ctrl||command + ‘+’/‘-’
+  document.onkeydown = function (event) {
+    const e = event || window.event
+    const ctrlKey = e.ctrlKey || e.metaKey
+    const keyCode = e.keyCode || e.which || e.charCode
+    if (ctrlKey && keyCode in keyCodeMap) {
+      e.preventDefault()
+    }
+  }
 })
 </script>
 
