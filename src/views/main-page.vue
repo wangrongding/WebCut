@@ -12,6 +12,11 @@ onMounted(() => {
   document.oncontextmenu = () => false
   // onselectstart事件禁用网页上选取的内容
   document.onselectstart = () => false
+  // 禁止缩放
+  document.addEventListener('mousewheel', (event: Event) => event.preventDefault(), {
+    capture: false,
+    passive: false
+  })
 })
 </script>
 
