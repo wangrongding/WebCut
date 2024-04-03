@@ -37,10 +37,10 @@ function toggleVideoPlay() {
       <div class="flex items-center gap-2">
         <button class="btn-control"><IconPrev /></button>
         <button class="btn-control" v-if="playStatus" @click="toggleVideoPlay">
-          <IconPlay />
+          <IconPause />
         </button>
         <button class="btn-control" v-else @click="toggleVideoPlay">
-          <IconPause />
+          <IconPlay />
         </button>
         <button class="btn-control"><IconNext /></button>
         <span>00:00:00 / 00:00:00</span>
