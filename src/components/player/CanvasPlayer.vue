@@ -215,14 +215,26 @@ function resizePlayer() {
 function setElementLayer(type: 'up' | 'down') {
   const activeObject = canvas.getActiveObject()
   if (!activeObject) return
-  if (type === 'up') {
-    // 上移一层
-    canvas.bringForward(activeObject)
-  } else {
-    // 下移一层
-    canvas.sendBackwards(activeObject)
+  switch (type) {
+    case 'up':
+      // 上移一层
+      canvas.bringForward(activeObject)
+      break
+    case 'down':
+      // 下移一层
+      canvas.sendBackwards(activeObject)
+      break
+    case 'top':
+      // 置于顶层
+      canvas.bringToFront(activeObject)
+      break
+    case 'bottom':
+      // 置于底层
+      canvas.sendToBack(activeObject)
+      break
+    default:
+      break
   }
-  canvas.discardActiveObject()
   menuShow.value = false
 }
 
