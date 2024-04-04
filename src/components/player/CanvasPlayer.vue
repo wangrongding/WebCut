@@ -212,7 +212,7 @@ function resizePlayer() {
 }
 
 // 设置元素层级
-function setElementLayer(type: 'up' | 'down') {
+function setElementLayer(type: 'up' | 'down' | 'top' | 'bottom') {
   const activeObject = canvas.getActiveObject()
   if (!activeObject) return
   switch (type) {
