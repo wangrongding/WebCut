@@ -51,6 +51,7 @@ function initCanvas() {
     stopContextMenu: true, // 禁止默认右键菜单
     selection: true, // 是否开启选择
     hoverCursor: 'pointer', // 鼠标悬停时的样式
+    preserveObjectStacking: true, // 保持对象的堆叠顺序(选中时不会置顶)
     backgroundColor: '#000' // 画布背景色
   })
   resizePlayer()
