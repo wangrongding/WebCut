@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ContextMenu from './ContextMenu.vue'
 import movie from '/bird.mp4'
 import { fabric } from 'fabric'
 import { storeToRefs } from 'pinia'
@@ -14,10 +15,25 @@ const container = ref<HTMLElement | null>(null)
 let video: HTMLVideoElement
 const playerStore = usePlayerStore()
 const { playStatus } = storeToRefs(playerStore)
-
+const menuShow = ref(false)
+const contextMenuPosition = ref({ x: 0, y: 0 })
+const contextMenu = ref<typeof ContextMenu | null>(null)
 let canvas: fabric.Canvas
 let ctx: CanvasRenderingContext2D
 let clipboard: fabric.Object | null = null
+
+const menuList = [
+  { key: 'flipX', shortkey: '⌘+C', text: '复制', callback: onCopy },
+  { key: 'flipX', shortkey: '⌘+V', text: '粘贴', callback: onPaste },
+  { key: 'flipX', shortkey: 'Del', text: '删除', callback: deleteElement },
+  { key: 'flipY', shortkey: '⌘+]', text: '上移一层', callback: () => setElementLayer('up') },
+  { key: 'flipY', shortkey: '⌘+[', text: '下移一层', callback: () => setElementLayer('down') },
+  { key: 'flipY', shortkey: '', text: '置于顶层', callback: () => {} },
+  { key: 'flipY', shortkey: '', text: '置于底层', callback: () => {} },
+  { key: 'flipX', shortkey: '', text: '旋转90°', callback: () => {} },
+  { key: 'flipX', shortkey: '', text: '左右翻转', callback: () => flip('x') },
+  { key: 'flipY', shortkey: '', text: '垂直翻转', callback: () => flip('y') }
+]
 
 emitter.on('element:copy', onCopy)
 emitter.on('element:paste', onPaste)
@@ -31,23 +47,43 @@ watch(playStatus, () => {
 
 function initCanvas() {
   canvas = new fabric.Canvas('canvas', {
+    fireRightClick: true, // 启用右键，button的数字为 3
+    stopContextMenu: true, // 禁止默认右键菜单
     selection: true, // 是否开启选择
     hoverCursor: 'pointer', // 鼠标悬停时的样式
     backgroundColor: '#000' // 画布背景色
   })
   resizePlayer()
   canvas.on('mouse:down', canvasOnMouseDown)
+  // 目标移动中
+  canvas.on('object:moving', (e) => {
+    if (!e.target) return
+    e.target.opacity = 0.5
+  })
+  // 目标修改后
+  canvas.on('object:modified', (e) => {
+    if (!e.target) return
+    e.target.opacity = 1
+  })
+
   ctx = canvas.getContext()
   drawElements()
 }
-
-function canvasOnMouseDown() {}
 
 // 绘制元素
 function drawElements() {
   drawVideo()
   drawStaticElements()
   canvas.renderAll()
+}
+
+// 删除元素
+function deleteElement() {
+  const activeObject = canvas.getActiveObject()
+  if (!activeObject) return
+  canvas.remove(activeObject)
+  canvas.requestRenderAll()
+  menuShow.value = false
 }
 
 // 绘制图片
@@ -58,10 +94,8 @@ function drawStaticElements() {
     obj.set({
       scaleX: 2,
       scaleY: 2,
-      left: 300,
-      top: 40,
-      // left: canvas.width! / 2 - (obj.width! * 5) / 2,
-      // top: canvas.height! / 2 - (obj.height! * 5) / 2,
+      left: canvas.width! / 2 - (obj.width! * 5) / 2,
+      top: canvas.height! / 2 - (obj.height! * 5) / 2,
       angle: 0
     })
     canvas.add(obj)
@@ -83,6 +117,7 @@ function drawVideo() {
   // video.src = 'https://assets.fedtop.com/picbed/movie.mp4'
   video.src = movie
   video.loop = true
+  video.preload = 'auto' // 不加会导致未播放时元素黑屏
   const canvasWidth = canvas.width!
   const canvasHeight = canvas.height!
 
@@ -163,46 +198,6 @@ function initControls() {
     canvas.requestRenderAll()
     return true
   }
-
-  // 添加删除按钮
-  addDeleteButton()
-}
-
-// editor 添加删除按钮
-function addDeleteButton() {
-  // 有些地方也有用 fabric.Object.prototype.controls.delete
-  fabric.Object.prototype.controls.deleteControl = new fabric.Control({
-    x: 0.5,
-    y: -0.5,
-    // offsetX: -26,
-    offsetY: -26,
-    cursorStyle: 'pointer',
-    mouseUpHandler: (eventData, transform) => {
-      var target = transform.target
-      var canvas = target.canvas!
-      canvas.remove(target)
-      canvas.requestRenderAll()
-      return true
-    },
-    render: (ctx, left, top, styleOverride, fabricObject) => {
-      const size = 10
-      const stroke = ctx.strokeStyle
-      ctx.strokeStyle = styleOverride.strokeStyle
-      ctx.beginPath()
-      ctx.arc(left, top, size, 0, Math.PI * 2, false)
-      ctx.closePath()
-      ctx.stroke()
-      ctx.beginPath()
-      ctx.moveTo(left - size / 2, top - size / 2)
-      ctx.lineTo(left + size / 2, top + size / 2)
-      ctx.moveTo(left - size / 2, top + size / 2)
-      ctx.lineTo(left + size / 2, top - size / 2)
-      ctx.closePath()
-      ctx.stroke()
-      ctx.strokeStyle = stroke
-      return fabricObject
-    }
-  })
 }
 
 // TODO 需完善窗口大小变化时，画布保持当前宽高比进行缩放
@@ -215,6 +210,21 @@ function resizePlayer() {
   })
 }
 
+// 设置元素层级
+function setElementLayer(type: 'up' | 'down') {
+  const activeObject = canvas.getActiveObject()
+  if (!activeObject) return
+  if (type === 'up') {
+    // 上移一层
+    canvas.bringForward(activeObject)
+  } else {
+    // 下移一层
+    canvas.sendBackwards(activeObject)
+  }
+  canvas.discardActiveObject()
+  menuShow.value = false
+}
+
 // 复制元素
 function onCopy() {
   const activeObject = canvas.getActiveObject()
@@ -222,6 +232,7 @@ function onCopy() {
   activeObject.clone((cloned: fabric.Object) => {
     clipboard = cloned
   })
+  menuShow.value = false
 }
 
 // 剪切元素
@@ -259,7 +270,56 @@ function onPaste() {
     clipboard!.left! += 10
     canvas.setActiveObject(clonedObj)
     canvas.requestRenderAll()
+    menuShow.value = false
   })
+}
+
+// 翻转元素
+function flip(flipType: 'x' | 'y') {
+  const activeObject = canvas.getActiveObject()
+  if (!activeObject) return
+  const type = flipType === 'x' ? 'flipX' : 'flipY'
+  activeObject.set({
+    [type]: !activeObject.get(type)
+  })
+  canvas?.renderAll()
+}
+
+// 初始化右键菜单
+function initContextMenu(e: fabric.IEvent<MouseEvent>) {
+  if (!e.target) return
+  canvas.setActiveObject(e.target)
+  contextMenuPosition.value.x = e.pointer!.x
+  contextMenuPosition.value.y = e.pointer!.y
+  menuShow.value = true
+  const menu = contextMenu.value!.$el
+  const contextMenuWidth = menu.offsetWidth || 200
+  const contextMenuHeight = menu.offsetHeight || 400
+
+  if (canvas.width! - e.pointer!.x <= contextMenuWidth) {
+    contextMenuPosition.value.x = canvas.width! - contextMenuWidth
+  } else {
+    contextMenuPosition.value.x = e.pointer!.x
+  }
+  if (canvas.height! - e.pointer!.y <= contextMenuHeight) {
+    contextMenuPosition.value.y = canvas.height! - contextMenuHeight
+  } else {
+    contextMenuPosition.value.y = e.pointer!.y
+  }
+}
+
+function canvasOnMouseDown(e: fabric.IEvent<MouseEvent>) {
+  switch (e.button) {
+    case 1:
+      menuShow.value = false
+      break
+    case 3:
+      initContextMenu(e)
+      break
+
+    default:
+      break
+  }
 }
 
 onMounted((): void => {
@@ -277,8 +337,18 @@ onMounted((): void => {
 })
 </script>
 <template>
-  <div class="h-full w-full overflow-hidden" ref="container">
+  <div class="h-full w-full overflow-hidden relative" ref="container">
     <canvas id="canvas"></canvas>
+    <ContextMenu
+      v-show="menuShow"
+      ref="contextMenu"
+      :menuList="menuList"
+      :style="{
+        top: contextMenuPosition.y + 'px',
+        left: contextMenuPosition.x + 'px'
+      }"
+      class="context-menu"
+    />
   </div>
 </template>
 <style lang="scss" scoped></style>
