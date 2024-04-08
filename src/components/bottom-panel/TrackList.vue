@@ -1,8 +1,26 @@
 <script setup lang="ts">
 import IconMusic from '~/assets/icons/icon-music.svg?component'
 import IconText from '~/assets/icons/icon-text.svg?component'
-import IconVideo from '~/assets/icons/icon-video.svg?component'
+import movie from '/bird.mp4'
+import { MP4Clip } from '@WebAV/av-cliper'
+import { watchEffect, ref } from 'vue'
+type Thumbnail = {
+  img: string
+  ts: number
+};
+const thumbnails = ref<Thumbnail[]>([])
+watchEffect(async () => {
+  // const clip = new MP4Clip((await fetch('https://assets.fedtop.com/picbed/movie.mp4')).body!)
+  const clip = new MP4Clip((await fetch(movie)).body!)
+  await clip.ready
+  // keyframe thumbnails
+  thumbnails.value = (await clip.thumbnails()).map(it => ({
+    img: URL.createObjectURL(it.img),
+    ts: it.ts
+  }))
+})
 </script>
+
 <template>
   <div class="grid content-center flex-1 text-center">
     <div class="element-track">
@@ -12,9 +30,10 @@ import IconVideo from '~/assets/icons/icon-video.svg?component'
       </div>
     </div>
     <div class="video-track">
-      <div class="flex gap-2">
-        <IconVideo />
-        <span>+ 视频轨道</span>
+      <div class="flex overflow-auto">
+        <div class="flex-none" v-for="img in thumbnails" :key="img.ts">
+          <img :src="img.img" :title="(img.ts / 1e6).toFixed(2) + 's'" />
+        </div>
       </div>
     </div>
     <div class="music-track">
@@ -25,6 +44,7 @@ import IconVideo from '~/assets/icons/icon-video.svg?component'
     </div>
   </div>
 </template>
+
 <style lang="scss" scoped>
 .music-track,
 .video-track,
@@ -46,7 +66,7 @@ import IconVideo from '~/assets/icons/icon-video.svg?component'
   // align-content: center;
   transition: width 200ms ease-out 0s;
   position: relative;
-  height: 48px;
+  height: 75px;
   background: rgb(30, 30, 41);
 }
 .music-track {
