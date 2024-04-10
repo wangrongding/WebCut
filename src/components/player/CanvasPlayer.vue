@@ -14,7 +14,7 @@ defineProps<{
 const container = ref<HTMLElement | null>(null)
 let video: HTMLVideoElement
 const playerStore = usePlayerStore()
-const { playStatus } = storeToRefs(playerStore)
+const { playStatus, currentTime, duration } = storeToRefs(playerStore)
 const menuShow = ref(false)
 const contextMenuPosition = ref({ x: 0, y: 0 })
 const contextMenu = ref<typeof ContextMenu | null>(null)
@@ -140,10 +140,12 @@ function drawVideo() {
       originX: 'left',
       originY: 'top'
     })
+    duration.value = video.duration
     canvas.add(videoElement)
     canvas.setActiveObject(videoElement)
     continuouslyRepaint()
   })
+  video.addEventListener('timeupdate', () => { currentTime.value = video.currentTime })
 }
 
 // 持续重绘
