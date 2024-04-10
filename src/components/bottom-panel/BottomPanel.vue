@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import TrackList from './TrackList.vue'
 import { storeToRefs } from 'pinia'
-import IconCopy from '~/assets/icons/control-copy.svg?component'
-import IconCut from '~/assets/icons/control-cut.svg?component'
-import IconDelete from '~/assets/icons/control-delete.svg?component'
-import IconNext from '~/assets/icons/control-next.svg?component'
-import IconPause from '~/assets/icons/control-pause.svg?component'
-import IconPlay from '~/assets/icons/control-play.svg?component'
-import IconPrev from '~/assets/icons/control-prev.svg?component'
-import IconRedo from '~/assets/icons/control-redo.svg?component'
-import IconUndo from '~/assets/icons/control-undo.svg?component'
-import IconZoomin from '~/assets/icons/control-zoomin.svg?component'
-import IconZoomout from '~/assets/icons/control-zoomout.svg?component'
-import IconZoomToFit from '~/assets/icons/control-zoomtofit.svg?component'
+import {
+  IconCopy,
+  IconCut,
+  IconDelete,
+  IconNext,
+  IconPause,
+  IconPlay,
+  IconPrev,
+  IconRedo,
+  IconUndo,
+  IconZoomToFit,
+  IconZoomin,
+  IconZoomout
+} from '~/assets/icons/index'
 import { usePlayerStore } from '~/stores/player'
 import { formatSeconds } from '~/utils/index'
 

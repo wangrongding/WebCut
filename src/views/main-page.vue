@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import IconExport from '~/assets/icons/icon-export.svg?component'
-import IconGithub from '~/assets/icons/icon-github.svg?component'
+import { IconExport, IconGithub } from '~/assets/icons/index'
 import BottomPanel from '~/components/bottom-panel/BottomPanel.vue'
 import LeftPanel from '~/components/left-panel/LeftPanel.vue'
 import CanvasPlayer from '~/components/player/CanvasPlayer.vue'

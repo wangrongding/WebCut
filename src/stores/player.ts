@@ -9,7 +9,7 @@ export const usePlayerStore = defineStore('playerStore', () => {
     playStatus.value = state === undefined ? !playStatus.value : state
   }
   // 播放列表
-  const playList = ref([])
+  const playList = ref<string[]>([])
   // 轨道数
   const trackCount = computed(() => playList.value.length)
 
