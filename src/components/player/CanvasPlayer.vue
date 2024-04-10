@@ -30,21 +30,16 @@ const menuList = [
   { key: 'flipY', shortkey: '⌘+[', text: '下移一层', callback: () => setElementLayer('down') },
   { key: 'flipY', shortkey: '', text: '置于顶层', callback: () => {} },
   { key: 'flipY', shortkey: '', text: '置于底层', callback: () => {} },
-  { key: 'flipX', shortkey: '', text: '旋转90°', callback: () => {} },
+  { key: 'flipX', shortkey: '', text: '旋转90°', callback: rotate },
   { key: 'flipX', shortkey: '', text: '左右翻转', callback: () => flip('x') },
   { key: 'flipY', shortkey: '', text: '垂直翻转', callback: () => flip('y') }
 ]
 
 emitter.on('element:copy', onCopy)
 emitter.on('element:paste', onPaste)
-watch(playStatus, () => {
-  if (playStatus.value) {
-    video.play()
-  } else {
-    video.pause()
-  }
-})
+watch(playStatus, (v) => video[v ? 'play' : 'pause']())
 
+// 初始化画布
 function initCanvas() {
   canvas = new fabric.Canvas('canvas', {
     fireRightClick: true, // 启用右键，button的数字为 3
@@ -54,7 +49,14 @@ function initCanvas() {
     preserveObjectStacking: true, // 保持对象的堆叠顺序(选中时不会置顶)
     backgroundColor: '#000' // 画布背景色
   })
+  ctx = canvas.getContext()
   resizePlayer()
+  initCanvasEvent()
+  drawElements()
+}
+
+// 初始化 Canvas 事件
+function initCanvasEvent() {
   canvas.on('mouse:down', canvasOnMouseDown)
   // 目标移动中
   canvas.on('object:moving', (e) => {
@@ -66,9 +68,6 @@ function initCanvas() {
     if (!e.target) return
     e.target.opacity = 1
   })
-
-  ctx = canvas.getContext()
-  drawElements()
 }
 
 // 绘制元素
@@ -145,7 +144,9 @@ function drawVideo() {
     canvas.setActiveObject(videoElement)
     continuouslyRepaint()
   })
-  video.addEventListener('timeupdate', () => { currentTime.value = video.currentTime })
+  video.addEventListener('timeupdate', () => {
+    currentTime.value = video.currentTime
+  })
 }
 
 // 持续重绘
@@ -296,6 +297,18 @@ function flip(flipType: 'x' | 'y') {
   const type = flipType === 'x' ? 'flipX' : 'flipY'
   activeObject.set({
     [type]: !activeObject.get(type)
+  })
+  canvas?.renderAll()
+}
+
+// 以元素的中心旋转 90°
+function rotate() {
+  const activeObject = canvas.getActiveObject()
+  if (!activeObject) return
+  activeObject.set({
+    angle: activeObject.angle! + 90,
+    originX: 'center',
+    originY: 'center'
   })
   canvas?.renderAll()
 }
