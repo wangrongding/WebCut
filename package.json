@@ -18,7 +18,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx,css,sass,scss,less,md,json,html}": [
+    "*.{js,ts,jsx,tsx,vue,css,sass,scss,less,md,json,html}": [
       "prettier --write"
     ],
     "*.{ts,js,tsx,jsx,vue}": [
