@@ -46,7 +46,7 @@ import IconVideo from '~/assets/icons/icon-video.svg?component'
   // align-content: center;
   transition: width 200ms ease-out 0s;
   position: relative;
-  height: 48px;
+  height: 75px;
   background: rgb(30, 30, 41);
 }
 .music-track {
