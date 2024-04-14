@@ -25,7 +25,7 @@ let clipboard: fabric.Object | null = null
 const menuList = [
   { key: 'flipX', shortkey: '⌘+C', text: '复制', callback: onCopy },
   { key: 'flipX', shortkey: '⌘+V', text: '粘贴', callback: onPaste },
-  { key: 'flipX', shortkey: 'Del', text: '删除', callback: deleteElement },
+  { key: 'flipX', shortkey: 'Del', text: '删除', callback: onDelete },
   { key: 'flipY', shortkey: '⌘+]', text: '上移一层', callback: () => setElementLayer('up') },
   { key: 'flipY', shortkey: '⌘+[', text: '下移一层', callback: () => setElementLayer('down') },
   { key: 'flipY', shortkey: '', text: '置于顶层', callback: () => {} },
@@ -37,6 +37,7 @@ const menuList = [
 
 emitter.on('element:copy', onCopy)
 emitter.on('element:paste', onPaste)
+emitter.on('element:delete', onDelete)
 watch(playStatus, (v) => video[v ? 'play' : 'pause']())
 
 // 初始化画布
@@ -78,8 +79,9 @@ function drawElements() {
 }
 
 // 删除元素
-function deleteElement() {
-  const activeObject = canvas.getActiveObject()
+// BUG 为啥删不了
+function onDelete(obj: fabric.Object) {
+  const activeObject = obj || canvas.getActiveObject()
   if (!activeObject) return
   canvas.remove(activeObject)
   canvas.requestRenderAll()
@@ -153,55 +155,6 @@ function drawVideo() {
 function continuouslyRepaint() {
   canvas.renderAll()
   fabric.util.requestAnimFrame(continuouslyRepaint)
-}
-
-// 初始化控件
-// TODO 需要根据不同的元素类型，定制不同的控件功能以及显示
-function initControls() {
-  // 修改控件显示
-  fabric.Object.prototype.setControlsVisibility({
-    mt: false, // 上边裁剪
-    mb: false, // 下边裁剪
-    ml: false, // 左侧裁剪
-    mr: true, // 右侧裁剪
-    bl: true, // 左下角缩放
-    br: true, // 右下角缩放
-    tl: true, // 左上角缩放
-    tr: true, // 右上角缩放
-    mtr: true // 旋转
-  })
-  // 修改控件颜色
-  fabric.Object.prototype.set({
-    borderColor: '#fff', // 控制边框颜色
-    cornerColor: '#fff', // 控制控件颜色
-    cornerStrokeColor: '#fff', // 控制控件边框颜色
-    cornerSize: 10, // 控制控件大小
-    cornerStyle: 'circle', // 控制控件形状
-    transparentCorners: false // 控制控件是否透明
-  })
-  // 修改所有图片类型的 mr 控件的 actionHandler
-  fabric.Object.prototype.controls.mr.actionHandler = (eventData, transform, x, y) => {
-    const target = transform.target as fabric.Transform['target'] & {
-      _originalElement: HTMLImageElement
-    }
-    const originWidth = target._originalElement.width
-    const originHeight = target._originalElement.height
-    // 这里应该有个原始大小的获取方法
-    // const originSize = xxxx.getOriginalSize()
-    // 右侧裁剪
-    const w = target.width! * target.scaleX!
-    const h = target.height! * target.scaleY!
-    const newWidth = x - target.left!
-    // 限制最大,最小宽
-    if (x < target.left! || newWidth < 50) return false
-    if (newWidth > originWidth) return false
-    target.set({
-      width: newWidth
-    })
-    target.setCoords()
-    canvas.requestRenderAll()
-    return true
-  }
 }
 
 // TODO 需完善窗口大小变化时，画布保持当前宽高比进行缩放
@@ -302,6 +255,7 @@ function flip(flipType: 'x' | 'y') {
 }
 
 // 以元素的中心旋转 90°
+// BUG 未拖动元素时，旋转会导致元素偏移
 function rotate() {
   const activeObject = canvas.getActiveObject()
   if (!activeObject) return
@@ -336,6 +290,12 @@ function initContextMenu(e: fabric.IEvent<MouseEvent>) {
   }
 }
 
+/**
+ * 需要在初始化时，设置 fireMiddleClick: true
+ * 左键：button 的值为 1
+ * 中键（也就是点击滚轮），button 的值为 2
+ * 右键：button 的值为 3
+ */
 function canvasOnMouseDown(e: fabric.IEvent<MouseEvent>) {
   switch (e.button) {
     case 1:
@@ -353,8 +313,6 @@ function canvasOnMouseDown(e: fabric.IEvent<MouseEvent>) {
 onMounted((): void => {
   // 初始化画布
   initCanvas()
-  // 初始化控件
-  initControls()
 
   // oncopy事件禁用复制;
   document.oncopy = onCopy
