@@ -12,10 +12,17 @@ onMounted(() => {
   // onselectstart事件禁用网页上选取的内容
   document.onselectstart = () => false
   // 禁止缩放
-  document.addEventListener('mousewheel', (event: Event) => event.preventDefault(), {
-    capture: false, // 是否在捕获阶段执行
-    passive: false // 是否是一个被动的监听器
-  })
+  document.addEventListener(
+    'mousewheel',
+    (event: Event) => {
+      // 如果是ctrl + 滚轮，阻止默认事件
+      if ((event as WheelEvent).ctrlKey) event.preventDefault()
+    },
+    {
+      capture: false, // 是否在捕获阶段执行
+      passive: false // 是否是一个被动的监听器
+    }
+  )
 
   // 禁用浏览器ctrl +- 缩放
   const keyCodeMap = [
@@ -58,10 +65,23 @@ onMounted(() => {
           <IconGithub class="h-[20px] w-[20px]" />
         </a>
 
-        <button class="btn btn-sm">
+        <!-- Open the modal using ID.showModal() method -->
+        <button class="btn btn-sm" onclick="testModal.showModal()">
           <IconExport />
           导出
         </button>
+        <dialog id="testModal" class="modal">
+          <div class="modal-box">
+            <h3 class="font-bold text-lg">Hello!</h3>
+            <p class="py-4">敬请期待，功能正在开发中...</p>
+            <div class="modal-action">
+              <form method="dialog">
+                <!-- if there is a button in form, it will close the modal -->
+                <button class="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
       </div>
     </header>
 

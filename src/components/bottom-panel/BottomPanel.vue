@@ -46,7 +46,7 @@ function toggleVideoPlay() {
           <IconPlay />
         </button>
         <button class="btn-control"><IconNext /></button>
-        <span>{{ `${formatSeconds(currentTime)} / ${formatSeconds(duration)}`}}</span>
+        <span>{{ `${formatSeconds(currentTime)} / ${formatSeconds(duration)}` }}</span>
       </div>
       <div class="flex gap-4">
         <button class="tooltip btn-control" data-tip="放大"><IconZoomout /></button>
