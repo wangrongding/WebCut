@@ -1,18 +1,30 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import VideoList from './VideoList.vue'
+import { typeList } from './typeList'
+import { ref } from 'vue'
+
+const activeType = ref(1)
+const setActiveType = (id: number) => {
+  activeType.value = id
+}
+</script>
 <template>
   <div class="left-box min-w-[400px] flex bg-[#272836]">
-    <div class="w-[60px] bg-[#1c1c26] flex flex-col gap-2 items-center">
+    <div class="w-[60px] bg-[#1c1c26] flex flex-col items-center">
       <div
-        v-for="item in 7"
-        :key="item"
-        class="w-[50px] h-[50px] rounded-lg bg-[#17171e] text-[#ababc0] hover:text-[white] select-none flex flex-col items-center leading-[50px]"
+        v-for="(item, index) in typeList"
+        @click="setActiveType(item.id)"
+        :key="index"
+        class="h-[60px] text-sm w-[60px] hover:bg-[#272836] text-[#ababc0] hover:text-[white] select-none flex flex-col justify-center items-center cursor-pointer"
+        :class="{ 'bg-[#272836] text-[white]': activeType === item.id }"
       >
-        type {{ item }}
+        <component :is="item.icon" />
+        {{ item.name }}
       </div>
     </div>
-    <div class="text-white p-8">
-      left-panel
-      <span>( 开发中... )</span>
+    <div class="text-white p-4 flex-1">
+      视频素材：（开发中）
+      <VideoList />
     </div>
   </div>
 </template>
