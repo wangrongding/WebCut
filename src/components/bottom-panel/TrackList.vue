@@ -1,24 +1,47 @@
 <script setup lang="ts">
-import IconMusic from '~/assets/icons/icon-music.svg?component'
-import IconText from '~/assets/icons/icon-text.svg?component'
-import IconVideo from '~/assets/icons/icon-video.svg?component'
+import VideoTrack, { type GetThumbnailBySeekOptions } from './VideoTrack.vue'
+import movie from '/bird.mp4'
+import { watchEffect, ref, computed } from 'vue'
+import { IconMusic, IconText, IconVideo } from '~/assets/icons/index'
+
+watchEffect(async () => {})
+const videoTrackList = computed<GetThumbnailBySeekOptions[]>(() => {
+  return [
+    {
+      url: movie,
+      count: 5,
+      clipStart: 0,
+      clipEnd: 10
+    }
+  ]
+})
 </script>
 <template>
-  <div class="grid content-center flex-1 text-center">
+  <div class="grid content-center flex-1 text-center h-full overflow-x-scroll">
     <div class="element-track">
-      <div class="flex gap-2">
+      <div class="flex gap-2 pl-[10px]">
         <IconText />
         <span>+ 添加文字等素材</span>
       </div>
     </div>
     <div class="video-track">
-      <div class="flex gap-2">
+      <div class="flex gap-2 pl-[10px]" v-if="videoTrackList.length === 0">
         <IconVideo />
         <span>+ 视频轨道</span>
       </div>
+      <div v-else class="flex flex-row flex-nowrap">
+        <VideoTrack
+          v-for="(item, index) in videoTrackList"
+          :key="index"
+          :url="item.url"
+          :count="item.count"
+          :clip-start="item.clipStart"
+          :clip-end="item.clipEnd"
+        />
+      </div>
     </div>
     <div class="music-track">
-      <div class="flex gap-2">
+      <div class="flex gap-2 pl-[10px]">
         <IconMusic />
         <span>+ 添加音频</span>
       </div>
@@ -29,8 +52,6 @@ import IconVideo from '~/assets/icons/icon-video.svg?component'
 .music-track,
 .video-track,
 .element-track {
-  width: 100%;
-  padding-left: 10px;
   font-size: 0.875rem;
   margin: 4px 0px;
   display: flex;
