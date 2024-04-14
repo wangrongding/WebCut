@@ -14,7 +14,7 @@ defineProps<{
 const container = ref<HTMLElement | null>(null)
 let video: HTMLVideoElement
 const playerStore = usePlayerStore()
-const { playStatus, currentTime, duration } = storeToRefs(playerStore)
+const { playStatus, videoRef, canvasRef, canvasFullScreen, currentTime, duration } = storeToRefs(playerStore)
 const menuShow = ref(false)
 const contextMenuPosition = ref({ x: 0, y: 0 })
 const contextMenu = ref<typeof ContextMenu | null>(null)
@@ -54,6 +54,9 @@ function initCanvas() {
     preserveObjectStacking: true, // 保持对象的堆叠顺序(选中时不会置顶)
     backgroundColor: '#000' // 画布背景色
   })
+  const canvasEle = canvas.getElement()
+  canvasEle.addEventListener('fullscreenchange', () => canvasFullScreen.value = !!document.fullscreenElement)
+  canvasRef.value = canvasEle
   resizePlayer()
   canvas.on('mouse:down', canvasOnMouseDown)
   // 目标移动中
@@ -140,12 +143,13 @@ function drawVideo() {
       originX: 'left',
       originY: 'top'
     })
+    videoRef.value = video
     duration.value = video.duration
     canvas.add(videoElement)
     canvas.setActiveObject(videoElement)
     continuouslyRepaint()
   })
-  video.addEventListener('timeupdate', () => { currentTime.value = video.currentTime })
+  video.addEventListener('timeupdate', () => currentTime.value = video.currentTime)
 }
 
 // 持续重绘

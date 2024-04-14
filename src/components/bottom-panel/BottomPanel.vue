@@ -22,9 +22,6 @@ const playerStore = usePlayerStore()
 // 将 store 中的 playStatus 转换为 ref
 const { playStatus, currentTime, duration } = storeToRefs(playerStore)
 
-function toggleVideoPlay() {
-  playerStore.playStatus = !playStatus.value
-}
 </script>
 <template>
   <div class="bottom-panel h-[300px] bg-[#17171e] pb-2 px-4 text-white flex flex-col">
@@ -38,14 +35,14 @@ function toggleVideoPlay() {
         <button class="tooltip btn-control" data-tip="复制"><IconCopy /></button>
       </div>
       <div class="flex items-center gap-2">
-        <button class="btn-control"><IconPrev /></button>
-        <button class="btn-control" v-if="playStatus" @click="toggleVideoPlay">
+        <button class="btn-control" @click="() => playerStore.skip(-5)"><IconPrev /></button>
+        <button class="btn-control" v-if="playStatus" @click="() => playerStore.togglePlay()">
           <IconPause />
         </button>
-        <button class="btn-control" v-else @click="toggleVideoPlay">
+        <button class="btn-control" v-else @click="() => playerStore.togglePlay()">
           <IconPlay />
         </button>
-        <button class="btn-control"><IconNext /></button>
+        <button class="btn-control" @click="() => playerStore.skip(5)"><IconNext /></button>
         <span>{{ `${formatSeconds(currentTime)} / ${formatSeconds(duration)}`}}</span>
       </div>
       <div class="flex gap-4">
@@ -64,7 +61,7 @@ function toggleVideoPlay() {
         <button class="tooltip" data-tip="适配到合适的大小">
           <IconZoomToFit class="btn-control" />
         </button>
-        <button>预览</button>
+        <button @click="() => playerStore.toggleCanvasFullScreen()">预览</button>
       </div>
     </div>
 
