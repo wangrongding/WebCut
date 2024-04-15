@@ -21,7 +21,6 @@ import { formatSeconds } from '~/utils/index'
 const playerStore = usePlayerStore()
 // 将 store 中的 playStatus 转换为 ref
 const { playStatus, currentTime, duration } = storeToRefs(playerStore)
-
 </script>
 <template>
   <div class="bottom-panel h-[300px] bg-[#17171e] pb-2 px-4 text-white flex flex-col">
@@ -43,7 +42,7 @@ const { playStatus, currentTime, duration } = storeToRefs(playerStore)
           <IconPlay />
         </button>
         <button class="btn-control" @click="() => playerStore.skip(5)"><IconNext /></button>
-        <span>{{ `${formatSeconds(currentTime)} / ${formatSeconds(duration)}`}}</span>
+        <span>{{ `${formatSeconds(currentTime)} / ${formatSeconds(duration)}` }}</span>
       </div>
       <div class="flex gap-4">
         <button class="tooltip btn-control" data-tip="放大"><IconZoomout /></button>

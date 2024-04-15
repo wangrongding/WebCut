@@ -1,3 +1,4 @@
+import type { fabric } from 'fabric'
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
@@ -12,6 +13,8 @@ export const usePlayerStore = defineStore('playerStore', () => {
   const playList = ref<string[]>([])
   // 轨道数
   const trackCount = computed(() => playList.value.length)
+  // 元素列表
+  const elementList = ref<fabric.Object[]>([])
 
   const canvasRef = ref<HTMLCanvasElement | null>(null)
 
@@ -46,6 +49,7 @@ export const usePlayerStore = defineStore('playerStore', () => {
     videoRef,
     skip,
     currentTime,
-    duration
+    duration,
+    elementList
   }
 })

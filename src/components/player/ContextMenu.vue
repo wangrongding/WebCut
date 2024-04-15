@@ -5,7 +5,7 @@ type Menu = {
   key: string // key
   text: string // 文本
   shortkey?: string // 快捷键
-  callback: () => void // 回调
+  callback: Function // 回调
 }
 
 defineProps<{ menuList: Menu[] }>()
