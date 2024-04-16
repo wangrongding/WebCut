@@ -14,3 +14,25 @@ This means that JavaScript can now handle audio and video, and you no longer nee
 And after simple testing, it was found that WebCodecs performs much better than ffmpeg.wasm.
 
 🌸 Open source is not easy, star to encourage ⭐️
+
+## Contributors
+
+<a href="https://github.com/wangrongding/webcut/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=wangrongding/webcut&max=400&columns=20"/>
+</a>
+
+## Star History
+
+<a href="https://star-history.com/#wangrongding/webcut">
+	<picture>
+	  <source
+	    media="(prefers-color-scheme: dark)"
+	    srcset="https://api.star-history.com/svg?repos=wangrongding/webcut&type=Date&theme=dark"
+	  />
+	  <source
+	    media="(prefers-color-scheme: light)"
+	    srcset="https://api.star-history.com/svg?repos=wangrongding/webcut&type=Date"
+	  />
+	  <img src="https://api.star-history.com/svg?repos=wangrongding/webcut&type=Date" alt="Star History Chart" />
+	</picture>
+</a>
