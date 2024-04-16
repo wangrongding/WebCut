@@ -53,7 +53,7 @@ async function getThumbnailBySeek(options: GetThumbnailBySeekOptions) {
     duration = clipEnd && clipStart ? clipEnd - clipStart : video.duration
     canvas.width = video.videoWidth
     canvas.height = video.videoHeight
-    getThumbnail()
+    generateThumbnail()
   })
 }
 getThumbnailBySeek(props)
