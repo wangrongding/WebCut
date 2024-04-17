@@ -12,7 +12,8 @@ defineProps<{
   msg: string
 }>()
 const container = ref<HTMLElement | null>(null)
-let video: HTMLVideoElement
+let videoRef: HTMLVideoElement
+let canvasRef: HTMLCanvasElement
 const playerStore = usePlayerStore()
 const { playStatus, currentTime, duration } = storeToRefs(playerStore)
 const menuShow = ref(false)
@@ -38,7 +39,9 @@ const menuList = [
 emitter.on('element:copy', onCopy)
 emitter.on('element:paste', onPaste)
 emitter.on('element:delete', onDelete)
-watch(playStatus, (v) => video[v ? 'play' : 'pause']())
+emitter.on('canvas:fullscreen', toggleCanvasFullScreen)
+emitter.on('video:skip', (time: number) => (videoRef.currentTime += time))
+watch(playStatus, (v) => videoRef[v ? 'play' : 'pause']())
 
 // 初始化画布
 function initCanvas() {
@@ -50,6 +53,7 @@ function initCanvas() {
     preserveObjectStacking: true, // 保持对象的堆叠顺序(选中时不会置顶)
     backgroundColor: '#000' // 画布背景色
   })
+  canvasRef = canvas.getElement()
   ctx = canvas.getContext()
   resizePlayer()
   initCanvasEvent()
@@ -118,27 +122,27 @@ function addText(text: string) {
 // 绘制视频
 // TODO 需要实现通过 webcodecs 进行视频解码后绘制
 async function drawVideo(url: string) {
-  video = document.createElement('video')
-  video.src = url
-  video.loop = true
-  video.preload = 'auto' // 不加会导致未播放时元素黑屏
+  videoRef = document.createElement('video')
+  videoRef.src = url
+  videoRef.loop = true
+  videoRef.preload = 'auto' // 不加会导致未播放时元素黑屏
 
   await new Promise<void>((resolve) => {
-    video.addEventListener('loadedmetadata', () => {
+    videoRef.addEventListener('loadedmetadata', () => {
       // 视频源宽高
-      video.width = video.videoWidth
-      video.height = video.videoHeight
+      videoRef.width = videoRef.videoWidth
+      videoRef.height = videoRef.videoHeight
       resolve()
     })
   })
 
-  const videoWidth = video.width
-  const videoHeight = video.height
+  const videoWidth = videoRef.width
+  const videoHeight = videoRef.height
   const canvasWidth = canvas.width!
   const canvasHeight = canvas.height!
   // 适配画布大小（如果 宽>高，以宽为准,反之以高为准）
   const scale = Math.min(canvasWidth / videoWidth, canvasHeight / videoHeight)
-  const videoElement = new fabric.Image(video, {
+  const videoElement = new fabric.Image(videoRef, {
     scaleX: scale,
     scaleY: scale,
     // 水平垂直居中
@@ -151,10 +155,10 @@ async function drawVideo(url: string) {
   canvas.add(videoElement)
   canvas.setActiveObject(videoElement)
   continuouslyRepaint()
-  duration.value = video.duration
+  duration.value = videoRef.duration
 
-  video.addEventListener('timeupdate', () => {
-    currentTime.value = video.currentTime
+  videoRef.addEventListener('timeupdate', () => {
+    currentTime.value = videoRef.currentTime
   })
 }
 
@@ -199,6 +203,20 @@ function setElementLayer(type: 'up' | 'down' | 'top' | 'bottom') {
       break
   }
   menuShow.value = false
+}
+
+function toggleCanvasFullScreen(fullscreen?: boolean) {
+  if (fullscreen === undefined) {
+    if (document.fullscreenElement) {
+      document.exitFullscreen()
+    } else {
+      canvasRef.requestFullscreen()
+    }
+  } else if (!document.fullscreenElement && fullscreen) {
+    canvasRef.requestFullscreen()
+  } else if (document.fullscreenElement && !fullscreen) {
+    document.exitFullscreen()
+  }
 }
 
 // 复制元素
