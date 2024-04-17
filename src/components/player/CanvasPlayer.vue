@@ -123,6 +123,106 @@ function addText(text: string) {
   canvas.add(textElement)
 }
 
+// 设置选中文本的斜体
+function italic() {
+  let activeTxt = canvas.getActiveObject() as fabric.Textbox
+  if (!activeTxt) return
+
+  if (activeTxt.isEditing) {
+    // 编辑状态，将被选中的文本进行斜体或恢复默认的操作
+    const state = activeTxt.getSelectionStyles().find((item) => item.fontStyle !== 'italic')
+
+    if (!state || (JSON.stringify(state) === '{}' && activeTxt['fontStyle'] === 'italic')) {
+      activeTxt.setSelectionStyles({ fontStyle: 'normal' })
+    } else {
+      activeTxt.setSelectionStyles({ fontStyle: 'italic' })
+    }
+  } else {
+    // 选择状态，全文进行斜体或恢复默认操作
+    if (activeTxt['fontStyle'] === 'italic') {
+      activeTxt.fontStyle = 'normal'
+      let s = activeTxt.styles
+      for (let i in s) {
+        for (let j in s[i]) {
+          s[i][j].fontStyle = 'normal'
+        }
+      }
+    } else {
+      activeTxt.fontStyle = 'italic'
+      let s = activeTxt.styles
+      for (let i in s) {
+        for (let j in s[i]) {
+          s[i][j].fontStyle = 'italic'
+        }
+      }
+    }
+  }
+  canvas.renderAll()
+}
+
+// 设置选中文本的删除线
+function linethrough() {
+  let activeTxt = canvas.getActiveObject() as fabric.Textbox // 获取当前选中的文字
+  // 如果当前没选中文字，那什么都不操作
+  if (!activeTxt) return
+  // 判断当前是否进入编辑状态
+  if (activeTxt.isEditing) {
+    // 编辑状态
+    const state = activeTxt.getSelectionStyles().find((item) => item.linethrough !== true)
+    // 如果当前
+    if (!state || (JSON.stringify(state) === '{}' && activeTxt['linethrough'] === true)) {
+      // 如果当前已经设置了中划线，那就把全局中划线取消
+      activeTxt.setSelectionStyles({ linethrough: false })
+    } else {
+      // 如果当前没设置中划线，那就添加上中划线
+      activeTxt.setSelectionStyles({ linethrough: true })
+    }
+  } else {
+    // 选择状态
+    if (activeTxt['linethrough'] === true) {
+      activeTxt.linethrough = false
+      activeTxt.dirty = true
+      let s = activeTxt.styles
+      for (let i in s) {
+        for (let j in s[i]) {
+          s[i][j].linethrough = false
+        }
+      }
+    } else {
+      activeTxt.linethrough = true
+      activeTxt.dirty = true
+      let s = activeTxt.styles
+      for (let i in s) {
+        for (let j in s[i]) {
+          s[i][j].linethrough = true
+        }
+      }
+    }
+  }
+  canvas.renderAll()
+}
+
+// 设置选中文本的字号
+function changeSize(value: number) {
+  let activeTxt = canvas.getActiveObject() as fabric.Textbox
+  if (!activeTxt) return
+  if (activeTxt.isEditing) {
+    // 编辑状态
+    activeTxt.setSelectionStyles({ fontSize: value })
+  } else {
+    activeTxt.fontSize = value
+    let s = activeTxt.styles
+    // 遍历行和列
+    for (let i in s) {
+      for (let j in s[i]) {
+        s[i][j].fontSize = value // 针对每个字设置字号
+      }
+    }
+    activeTxt.dirty = true
+  }
+  canvas.renderAll()
+}
+
 // 绘制视频
 // TODO 需要实现通过 webcodecs 进行视频解码后绘制
 async function drawVideo(url: string) {
