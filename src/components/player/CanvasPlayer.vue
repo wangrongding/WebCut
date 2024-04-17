@@ -51,7 +51,11 @@ function initCanvas() {
     selection: true, // 是否开启选择
     hoverCursor: 'pointer', // 鼠标悬停时的样式
     preserveObjectStacking: true, // 保持对象的堆叠顺序(选中时不会置顶)
-    backgroundColor: '#000' // 画布背景色
+    backgroundColor: '#000', // 画布背景色
+    selectionBorderColor: 'red', // 选中边框颜色
+    selectionLineWidth: 2, // 选中边框宽度
+    selectionDashArray: [10], // 选中边框虚线
+    selectionFullyContained: true // 精准选择(不包含空白区域，真正选中图形才算选中 )
   })
   canvasRef = canvas.getElement()
   ctx = canvas.getContext()
