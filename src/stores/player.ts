@@ -16,40 +16,9 @@ export const usePlayerStore = defineStore('playerStore', () => {
   // 元素列表
   const elementList = ref<fabric.Object[]>([])
 
-  const canvasRef = ref<HTMLCanvasElement | null>(null)
-
-  const canvasFullScreen = ref(false)
-
-  function toggleCanvasFullScreen() {
-    if (canvasRef.value?.requestFullscreen) {
-      canvasRef.value.requestFullscreen()
-    }
-  }
-
-  const videoRef = ref<HTMLVideoElement | null>(null)
-
   const currentTime = ref<number>(0)
 
   const duration = ref<number>(0)
 
-  function skip(seconds: number) {
-    if (videoRef.value) {
-      videoRef.value.currentTime += seconds
-    }
-  }
-
-  return {
-    playStatus,
-    togglePlay,
-    playList,
-    trackCount,
-    canvasRef,
-    canvasFullScreen,
-    toggleCanvasFullScreen,
-    videoRef,
-    skip,
-    currentTime,
-    duration,
-    elementList
-  }
+  return { playStatus, togglePlay, playList, trackCount, currentTime, duration, elementList }
 })
