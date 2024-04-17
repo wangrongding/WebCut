@@ -79,9 +79,10 @@ function initCanvasEvent() {
 }
 
 // 绘制元素
-function drawElements() {
-  drawVideo()
-  drawStaticElements()
+async function drawElements() {
+  await drawVideo(movie)
+  addSVG(Logo)
+  addText('开发中...')
   canvas.renderAll()
 }
 
@@ -95,65 +96,70 @@ function onDelete(obj: fabric.Object) {
   menuShow.value = false
 }
 
-// 绘制图片
-function drawStaticElements() {
-  // 绘制 svg
-  fabric.loadSVGFromURL(Logo, (objects, options) => {
+// 绘制 svg
+function addSVG(url: string) {
+  fabric.loadSVGFromURL(url, (objects, options) => {
     const obj = fabric.util.groupSVGElements(objects, options)
     obj.set({
-      scaleX: 2,
-      scaleY: 2,
+      scaleX: 8,
+      scaleY: 8,
       left: canvas.width! / 2 - (obj.width! * 5) / 2,
       top: canvas.height! / 2 - (obj.height! * 5) / 2,
       angle: 0
     })
     canvas.add(obj)
   })
-  // 添加文字
-  const text = new fabric.Text('开发中...', {
-    left: 20,
-    top: 20,
+}
+
+// 添加文字
+function addText(text: string) {
+  const textElement = new fabric.Textbox(text, {
+    left: canvas.width! / 2,
+    top: canvas.height! / 2,
     fill: 'white',
     fontSize: 20
   })
-  canvas.add(text)
+  canvas.add(textElement)
 }
 
 // 绘制视频
 // TODO 需要实现通过 webcodecs 进行视频解码后绘制
-function drawVideo() {
+async function drawVideo(url: string) {
   video = document.createElement('video')
-  // video.src = 'https://assets.fedtop.com/picbed/movie.mp4'
-  video.src = movie
+  video.src = url
   video.loop = true
   video.preload = 'auto' // 不加会导致未播放时元素黑屏
+
+  await new Promise<void>((resolve) => {
+    video.addEventListener('loadedmetadata', () => {
+      // 视频源宽高
+      video.width = video.videoWidth
+      video.height = video.videoHeight
+      resolve()
+    })
+  })
+
+  const videoWidth = video.width
+  const videoHeight = video.height
   const canvasWidth = canvas.width!
   const canvasHeight = canvas.height!
-
-  video.addEventListener('loadedmetadata', () => {
-    // 视频源宽高
-    const videoWidth = video.videoWidth
-    const videoHeight = video.videoHeight
-    video.width = videoWidth
-    video.height = videoHeight
-    // 适配画布大小（如果 宽>高，以宽为准,反之以高为准）
-    const scale = Math.min(canvasWidth / videoWidth, canvasHeight / videoHeight)
-    const videoElement = new fabric.Image(video, {
-      scaleX: scale,
-      scaleY: scale,
-      // 水平垂直居中
-      left: canvasWidth / 2 - (videoWidth * scale) / 2,
-      top: canvasHeight / 2 - (videoHeight * scale) / 2,
-      angle: 0,
-      originX: 'left',
-      originY: 'top'
-    })
-    videoRef.value = video
-    duration.value = video.duration
-    canvas.add(videoElement)
-    canvas.setActiveObject(videoElement)
-    continuouslyRepaint()
+  // 适配画布大小（如果 宽>高，以宽为准,反之以高为准）
+  const scale = Math.min(canvasWidth / videoWidth, canvasHeight / videoHeight)
+  const videoElement = new fabric.Image(video, {
+    scaleX: scale,
+    scaleY: scale,
+    // 水平垂直居中
+    left: canvasWidth / 2 - (videoWidth * scale) / 2,
+    top: canvasHeight / 2 - (videoHeight * scale) / 2,
+    angle: 0,
+    originX: 'left',
+    originY: 'top'
   })
+  canvas.add(videoElement)
+  canvas.setActiveObject(videoElement)
+  continuouslyRepaint()
+  duration.value = video.duration
+
   video.addEventListener('timeupdate', () => {
     currentTime.value = video.currentTime
   })
