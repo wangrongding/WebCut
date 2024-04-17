@@ -39,8 +39,10 @@ const menuList = [
 emitter.on('element:copy', onCopy)
 emitter.on('element:paste', onPaste)
 emitter.on('element:delete', onDelete)
+emitter.on('element:add', onAdd)
 emitter.on('canvas:fullscreen', toggleCanvasFullScreen)
 emitter.on('video:skip', (time: number) => (videoRef.currentTime += time))
+
 watch(playStatus, (v) => videoRef[v ? 'play' : 'pause']())
 
 // 初始化画布
@@ -95,6 +97,24 @@ function onDelete(obj: fabric.Object) {
   canvas.remove(activeObject)
   canvas.requestRenderAll()
   menuShow.value = false
+}
+
+// 添加元素
+// TODO 后面需要支持传入添加元素的配置
+function onAdd({ type, value }: { type: string; value: string }) {
+  switch (type) {
+    case 'video':
+      drawVideo(value)
+      break
+    case 'svg':
+      addSVG(value)
+      break
+    case 'text':
+      addText(value)
+      break
+    default:
+      break
+  }
 }
 
 // 绘制 svg

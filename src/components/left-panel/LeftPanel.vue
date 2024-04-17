@@ -9,7 +9,7 @@ const setActiveType = (id: number) => {
 }
 </script>
 <template>
-  <div class="left-box min-w-[400px] flex bg-[#272836]">
+  <div class="left-box w-[400px] flex bg-[#272836]">
     <div class="w-[60px] bg-[#1c1c26] flex flex-col items-center">
       <div
         v-for="(item, index) in typeList"
@@ -23,7 +23,6 @@ const setActiveType = (id: number) => {
       </div>
     </div>
     <div class="text-white p-4 flex-1">
-      视频素材：（开发中）
       <VideoList />
     </div>
   </div>
