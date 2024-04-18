@@ -3,8 +3,7 @@
  */
 module.exports = {
   plugins: [
-    require.resolve('prettier-plugin-tailwindcss'),
-    require.resolve('@trivago/prettier-plugin-sort-imports')
+    require.resolve('prettier-plugin-tailwindcss') // 必须放在最后
   ],
   importOrderSeparation: true,
   tailwindConfig: './tailwind.config.js',
