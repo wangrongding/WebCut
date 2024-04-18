@@ -36,3 +36,7 @@ And after simple testing, it was found that WebCodecs performs much better than 
 	  <img src="https://api.star-history.com/svg?repos=wangrongding/webcut&type=Date" alt="Star History Chart" />
 	</picture>
 </a>
+
+## License
+
+GPL-3.0 License. See [License here](./LICENSE) for details.
