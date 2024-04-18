@@ -15,6 +15,10 @@ Chrome 94 开放了 WebCodecs API， 该 api 提供对浏览器中已有编解�
 
 🌸 开源不易，star 鼓励 ⭐️
 
+## 截图
+
+![](https://raw.githubusercontent.com/wangrongding/image-house/master/%E6%9C%AA%E5%91%BD%E5%90%8D%2010.png)
+
 ## 贡献者
 
 <a href="https://github.com/wangrongding/webcut/graphs/contributors">
@@ -24,15 +28,19 @@ Chrome 94 开放了 WebCodecs API， 该 api 提供对浏览器中已有编解�
 ## Star 历史
 
 <a href="https://star-history.com/#wangrongding/webcut">
-	<picture>
-	  <source
-	    media="(prefers-color-scheme: dark)"
-	    srcset="https://api.star-history.com/svg?repos=wangrongding/webcut&type=Date&theme=dark"
-	  />
-	  <source
-	    media="(prefers-color-scheme: light)"
-	    srcset="https://api.star-history.com/svg?repos=wangrongding/webcut&type=Date"
-	  />
-	  <img src="https://api.star-history.com/svg?repos=wangrongding/webcut&type=Date" alt="Star History Chart" />
-	</picture>
+    <picture>
+      <source
+        media="(prefers-color-scheme: dark)"
+        srcset="https://api.star-history.com/svg?repos=wangrongding/webcut&type=Date&theme=dark"
+      />
+      <source
+        media="(prefers-color-scheme: light)"
+        srcset="https://api.star-history.com/svg?repos=wangrongding/webcut&type=Date"
+      />
+      <img src="https://api.star-history.com/svg?repos=wangrongding/webcut&type=Date" alt="星级历史图表" />
+    </picture>
 </a>
+
+## 许可证
+
+GPL-3.0许可证。详情请见[此处的许可证](./LICENSE)。

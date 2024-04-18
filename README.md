@@ -15,6 +15,10 @@ And after simple testing, it was found that WebCodecs performs much better than 
 
 🌸 Open source is not easy, star to encourage ⭐️
 
+## Screenshots
+
+![](https://raw.githubusercontent.com/wangrongding/image-house/master/%E6%9C%AA%E5%91%BD%E5%90%8D%2010.png)
+
 ## Contributors
 
 <a href="https://github.com/wangrongding/webcut/graphs/contributors">
