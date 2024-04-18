@@ -11,6 +11,7 @@ type Events = {
     value: string // 图片地址 url | 视频地址 url | 文本内容 | SVG ...
     type: string // 元素类型
   }
+  'element:align': 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' // 对齐方式
   'video:skip': number // 跳转视频
   'canvas:fullscreen'?: boolean // 全屏
 }
