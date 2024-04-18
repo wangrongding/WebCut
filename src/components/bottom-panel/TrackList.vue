@@ -17,7 +17,7 @@ const videoTrackList = computed<GetThumbnailBySeekOptions[]>(() => {
 })
 </script>
 <template>
-  <div class="grid content-center flex-1 text-center h-full overflow-x-scroll">
+  <div class="grid h-full flex-1 content-center overflow-x-scroll text-center">
     <div class="element-track">
       <div class="flex gap-2 pl-[10px]">
         <IconText />

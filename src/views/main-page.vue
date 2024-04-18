@@ -72,7 +72,7 @@ onMounted(() => {
         </button>
         <dialog id="testModal" class="modal">
           <div class="modal-box">
-            <h3 class="font-bold text-lg">Hello!</h3>
+            <h3 class="text-lg font-bold">Hello!</h3>
             <p class="py-4">敬请期待，功能正在开发中...</p>
             <div class="modal-action">
               <form method="dialog">

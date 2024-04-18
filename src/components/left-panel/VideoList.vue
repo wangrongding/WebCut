@@ -42,7 +42,7 @@ const pause = (e: MouseEvent) => {
     <p>视频素材：（开发中）</p>
     <div class="grid grid-cols-2 gap-2">
       <div
-        class="cursor-pointer video-item rounded-md relative"
+        class="video-item relative cursor-pointer rounded-md"
         v-for="item in 10"
         :key="item"
         @click="addVideo(movie)"

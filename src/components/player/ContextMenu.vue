@@ -18,10 +18,10 @@ defineExpose({
 <template>
   <div
     ref="contextMenu"
-    class="context-menu-container w-[200px] flex flex-col gap-1 absolute bg-[#1E1E29] border-[#505067] border text-[#D5D5E1] p-2"
+    class="context-menu-container absolute flex w-[200px] flex-col gap-1 border border-[#505067] bg-[#1E1E29] p-2 text-[#D5D5E1]"
   >
     <button
-      class="hover:bg-[#3B3B4F] text-left p-1 rounded-sm flex justify-between"
+      class="flex justify-between rounded-sm p-1 text-left hover:bg-[#3B3B4F]"
       v-for="(item, index) in menuList"
       :key="index"
       @click="item.callback"

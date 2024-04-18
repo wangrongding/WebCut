@@ -31,15 +31,15 @@ function toggleCanvasFullScreen() {
 }
 </script>
 <template>
-  <div class="bottom-panel h-[300px] bg-[#17171e] pb-2 px-4 text-white flex flex-col">
+  <div class="bottom-panel flex h-[300px] flex-col bg-[#17171e] px-4 pb-2 text-white">
     <!-- 刻度尺 -->
-    <div class="flex border-y justify-between border-[#272836] h-[40px] items-center gap-2">
+    <div class="flex h-[40px] items-center justify-between gap-2 border-y border-[#272836]">
       <div class="flex gap-2">
-        <button class="tooltip btn-control" data-tip="撤销"><IconUndo /></button>
-        <button class="tooltip btn-control" data-tip="恢复"><IconRedo /></button>
-        <button class="tooltip btn-control" data-tip="分割"><IconCut /></button>
-        <button class="tooltip btn-control" data-tip="删除"><IconDelete /></button>
-        <button class="tooltip btn-control" data-tip="复制"><IconCopy /></button>
+        <button class="btn-control tooltip" data-tip="撤销"><IconUndo /></button>
+        <button class="btn-control tooltip" data-tip="恢复"><IconRedo /></button>
+        <button class="btn-control tooltip" data-tip="分割"><IconCut /></button>
+        <button class="btn-control tooltip" data-tip="删除"><IconDelete /></button>
+        <button class="btn-control tooltip" data-tip="复制"><IconCopy /></button>
       </div>
       <div class="flex items-center gap-2">
         <button class="btn-control" @click="skipVideo(-5)"><IconPrev /></button>
@@ -53,7 +53,7 @@ function toggleCanvasFullScreen() {
         <span>{{ `${formatSeconds(currentTime)} / ${formatSeconds(duration)}` }}</span>
       </div>
       <div class="flex gap-4">
-        <button class="tooltip btn-control" data-tip="放大"><IconZoomout /></button>
+        <button class="btn-control tooltip" data-tip="放大"><IconZoomout /></button>
         <div class="flex items-center gap-2">
           <input
             type="range"
@@ -64,7 +64,7 @@ function toggleCanvasFullScreen() {
           />
           {{ '40%' }}
         </div>
-        <button class="tooltip btn-control" data-tip="缩小"><IconZoomin /></button>
+        <button class="btn-control tooltip" data-tip="缩小"><IconZoomin /></button>
         <button class="tooltip" data-tip="适配到合适的大小">
           <IconZoomToFit class="btn-control" />
         </button>
