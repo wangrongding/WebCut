@@ -40,6 +40,7 @@ emitter.on('element:copy', onCopy)
 emitter.on('element:paste', onPaste)
 emitter.on('element:delete', onDelete)
 emitter.on('element:add', onAdd)
+emitter.on('element:align', onAlign)
 emitter.on('canvas:fullscreen', toggleCanvasFullScreen)
 emitter.on('video:skip', (time: number) => (videoRef.currentTime += time))
 
@@ -85,7 +86,9 @@ function initCanvasEvent() {
 async function drawElements() {
   await drawVideo(movie)
   addSVG(Logo)
-  addText('开发中...')
+  addText('侧边栏，添加素材...', { left: 100, top: 100, fill: 'red' })
+  addText('右键点击元素，进行操作', { left: 400, top: 150 })
+  addText('双击修改文字', { left: 400, top: 500, angle: 45, fill: 'blue', fontSize: 30 })
   canvas.renderAll()
 }
 
@@ -121,11 +124,12 @@ function onAdd({ type, value }: { type: string; value: string }) {
 function addSVG(url: string) {
   fabric.loadSVGFromURL(url, (objects, options) => {
     const obj = fabric.util.groupSVGElements(objects, options)
+    const scale = 5
     obj.set({
-      scaleX: 8,
-      scaleY: 8,
-      left: canvas.width! / 2 - (obj.width! * 5) / 2,
-      top: canvas.height! / 2 - (obj.height! * 5) / 2,
+      scaleX: scale,
+      scaleY: scale,
+      left: canvas.width! / 2 - (obj.width! * scale) / 2,
+      top: canvas.height! / 2 - (obj.height! * scale) / 2,
       angle: 0
     })
     canvas.add(obj)
@@ -133,13 +137,17 @@ function addSVG(url: string) {
 }
 
 // 添加文字
-function addText(text: string) {
+function addText(text: string, options?: fabric.ITextboxOptions) {
   const textElement = new fabric.Textbox(text, {
     left: canvas.width! / 2,
     top: canvas.height! / 2,
     fill: 'white',
-    fontSize: 20
+    fontSize: 20,
+    ...options
+    // fontStyle: 'italic', // 整体斜体
+    // splitByGrapheme: true // 自动换行
   })
+  // textElement.splitByGrapheme = true // 自动换行
   canvas.add(textElement)
 }
 
@@ -239,6 +247,38 @@ function changeSize(value: number) {
       }
     }
     activeTxt.dirty = true
+  }
+  canvas.renderAll()
+}
+
+// 水平居中选中元素
+function onAlign(align: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') {
+  let activeObj = canvas.getActiveObject()
+  if (!activeObj) return
+
+  // canvas.viewportCenterObject(rect) // 画布水平垂直居中
+  // canvas.renderAll()
+  switch (align) {
+    case 'center':
+      activeObj.centerH()
+      break
+    case 'middle':
+      activeObj.centerV()
+      break
+    case 'left':
+      activeObj.set('left', 0)
+      break
+    case 'right':
+      activeObj.set('left', canvas.width! - activeObj.width! * activeObj.scaleX!)
+      break
+    case 'top':
+      activeObj.set('top', 0)
+      break
+    case 'bottom':
+      activeObj.set('top', canvas.height! - activeObj.height! * activeObj.scaleY!)
+      break
+    default:
+      break
   }
   canvas.renderAll()
 }
@@ -472,7 +512,7 @@ onMounted((): void => {
 })
 </script>
 <template>
-  <div class="h-full w-full overflow-hidden relative" ref="container">
+  <div class="relative h-full w-full overflow-hidden" ref="container">
     <canvas id="canvas"></canvas>
     <ContextMenu
       v-show="menuShow"

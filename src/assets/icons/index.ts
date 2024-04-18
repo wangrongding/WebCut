@@ -15,6 +15,12 @@ import IconGithub from '~/assets/icons/icon-github.svg?component'
 import IconMusic from '~/assets/icons/icon-music.svg?component'
 import IconText from '~/assets/icons/icon-text.svg?component'
 import IconVideo from '~/assets/icons/icon-video.svg?component'
+import IconAlignLeft from '~/assets/icons/icon-align-left.svg?component'
+import IconAlignCenter from '~/assets/icons/icon-align-center.svg?component'
+import IconAlignRight from '~/assets/icons/icon-align-right.svg?component'
+import IconAlignTop from '~/assets/icons/icon-align-top.svg?component'
+import IconAlignMiddle from '~/assets/icons/icon-align-middle.svg?component'
+import IconAlignBottom from '~/assets/icons/icon-align-bottom.svg?component'
 
 export {
   IconExport,
@@ -33,5 +39,11 @@ export {
   IconUndo,
   IconZoomin,
   IconZoomout,
-  IconZoomToFit
+  IconZoomToFit,
+  IconAlignLeft,
+  IconAlignCenter,
+  IconAlignRight,
+  IconAlignTop,
+  IconAlignMiddle,
+  IconAlignBottom
 }
