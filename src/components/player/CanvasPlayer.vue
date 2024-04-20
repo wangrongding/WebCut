@@ -155,6 +155,72 @@ function addText(text: string, options?: fabric.ITextboxOptions) {
   canvas.add(textElement)
 }
 
+// 绘制视频
+// TODO 需要实现通过 webcodecs 进行视频解码后绘制
+async function drawVideo(url: string) {
+  videoRef = document.createElement('video')
+  videoRef.src = url
+  videoRef.loop = true
+  videoRef.preload = 'auto' // 不加会导致未播放时元素黑屏
+
+  await new Promise<void>((resolve) => {
+    videoRef.addEventListener('loadedmetadata', () => {
+      // 视频源宽高
+      videoRef.width = videoRef.videoWidth
+      videoRef.height = videoRef.videoHeight
+      resolve()
+    })
+  })
+
+  const videoWidth = videoRef.width
+  const videoHeight = videoRef.height
+  const canvasWidth = canvas.width!
+  const canvasHeight = canvas.height!
+  // 适配画布大小（如果 宽>高，以宽为准,反之以高为准）
+  const scale = Math.min(canvasWidth / videoWidth, canvasHeight / videoHeight)
+  const videoElement = new fabric.Image(videoRef, {
+    scaleX: scale,
+    scaleY: scale,
+    // 水平垂直居中
+    left: canvasWidth / 2 - (videoWidth * scale) / 2,
+    top: canvasHeight / 2 - (videoHeight * scale) / 2,
+    angle: 0,
+    originX: 'left',
+    originY: 'top'
+  })
+  canvas.add(videoElement)
+  continuouslyRepaint()
+  duration.value = videoRef.duration
+
+  videoRef.addEventListener('timeupdate', () => {
+    currentTime.value = videoRef.currentTime
+  })
+}
+
+// 添加图片
+function addImage(url: string) {
+  const activeObject = canvas.getActiveObject()
+  fabric.Image.fromURL(url, (img) => {
+    const scale = 0.5
+    img.set({
+      scaleX: scale,
+      scaleY: scale,
+      // 存在选中元素时，以选中元素为基准添加图片，否则以画布中心为基准
+      left: activeObject ? activeObject.left! + 30 : canvas.width! / 2 - (img.width! * scale) / 2,
+      top: activeObject ? activeObject.top! + 30 : canvas.height! / 2 - (img.height! * scale) / 2,
+      angle: 0
+    })
+    canvas.add(img)
+    canvas.setActiveObject(img)
+  })
+}
+
+// 持续重绘
+function continuouslyRepaint() {
+  canvas.renderAll()
+  fabric.util.requestAnimFrame(continuouslyRepaint)
+}
+
 // 设置选中文本的斜体
 function italic() {
   let activeTxt = canvas.getActiveObject() as fabric.Textbox
@@ -285,70 +351,6 @@ function setElementAlign(align: 'left' | 'center' | 'right' | 'top' | 'middle' |
   canvas.renderAll()
 }
 
-// 绘制视频
-// TODO 需要实现通过 webcodecs 进行视频解码后绘制
-async function drawVideo(url: string) {
-  videoRef = document.createElement('video')
-  videoRef.src = url
-  videoRef.loop = true
-  videoRef.preload = 'auto' // 不加会导致未播放时元素黑屏
-
-  await new Promise<void>((resolve) => {
-    videoRef.addEventListener('loadedmetadata', () => {
-      // 视频源宽高
-      videoRef.width = videoRef.videoWidth
-      videoRef.height = videoRef.videoHeight
-      resolve()
-    })
-  })
-
-  const videoWidth = videoRef.width
-  const videoHeight = videoRef.height
-  const canvasWidth = canvas.width!
-  const canvasHeight = canvas.height!
-  // 适配画布大小（如果 宽>高，以宽为准,反之以高为准）
-  const scale = Math.min(canvasWidth / videoWidth, canvasHeight / videoHeight)
-  const videoElement = new fabric.Image(videoRef, {
-    scaleX: scale,
-    scaleY: scale,
-    // 水平垂直居中
-    left: canvasWidth / 2 - (videoWidth * scale) / 2,
-    top: canvasHeight / 2 - (videoHeight * scale) / 2,
-    angle: 0,
-    originX: 'left',
-    originY: 'top'
-  })
-  canvas.add(videoElement)
-  canvas.setActiveObject(videoElement)
-  continuouslyRepaint()
-  duration.value = videoRef.duration
-
-  videoRef.addEventListener('timeupdate', () => {
-    currentTime.value = videoRef.currentTime
-  })
-}
-
-// 添加图片
-function addImage(url: string) {
-  fabric.Image.fromURL(url, (img) => {
-    const scale = 0.5
-    img.set({
-      scaleX: scale,
-      scaleY: scale,
-      left: canvas.width! / 2 - (img.width! * scale) / 2,
-      top: canvas.height! / 2 - (img.height! * scale) / 2,
-      angle: 0
-    })
-    canvas.add(img)
-  })
-}
-
-// 持续重绘
-function continuouslyRepaint() {
-  canvas.renderAll()
-  fabric.util.requestAnimFrame(continuouslyRepaint)
-}
-
 // TODO 需完善窗口大小变化时，画布保持当前宽高比进行缩放
 function resizePlayer() {
   const width = container.value!.clientWidth
@@ -426,8 +428,8 @@ function onPaste() {
   clipboard!.clone((clonedObj: any) => {
     canvas.discardActiveObject()
     clonedObj.set({
-      left: clonedObj.left + 10,
-      top: clonedObj.top + 10,
+      left: clonedObj.left + 30,
+      top: clonedObj.top + 30,
       evented: true
     })
     if (clonedObj.type === 'activeSelection') {
@@ -441,8 +443,8 @@ function onPaste() {
     } else {
       canvas.add(clonedObj)
     }
-    clipboard!.top! += 10
-    clipboard!.left! += 10
+    clipboard!.top! += 30
+    clipboard!.left! += 30
     canvas.setActiveObject(clonedObj)
     canvas.requestRenderAll()
     menuShow.value = false
