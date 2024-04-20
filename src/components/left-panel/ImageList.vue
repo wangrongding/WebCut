@@ -41,10 +41,10 @@ const imgList = [
       @change="onFileChange"
     />
     <p>图片素材：（开发中）</p>
-    <div class="grid max-h-[calc(100vh-200px)] grid-cols-2 gap-2 overflow-y-auto">
+    <div class="max-h-[calc(100vh-200px)] columns-2 gap-2 overflow-y-auto">
       <img
         :src="item"
-        class="image-item relative cursor-pointer rounded-md"
+        class="image-item relative mb-2 cursor-pointer rounded-md"
         alt=""
         v-for="(item, index) in imgList"
         :key="index"

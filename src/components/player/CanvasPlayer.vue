@@ -191,6 +191,7 @@ async function drawVideo(url: string) {
   canvas.add(videoElement)
   continuouslyRepaint()
   duration.value = videoRef.duration
+  canvas.setActiveObject(videoElement)
 
   videoRef.addEventListener('timeupdate', () => {
     currentTime.value = videoRef.currentTime
