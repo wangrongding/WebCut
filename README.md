@@ -43,4 +43,4 @@ And after simple testing, it was found that WebCodecs performs much better than 
 
 ## License
 
-GPL-3.0 License. See [License here](./LICENSE) for details.
+LGPL-3.0 License. See [License here](./LICENSE) for details.
