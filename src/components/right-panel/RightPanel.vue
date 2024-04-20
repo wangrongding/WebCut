@@ -75,7 +75,7 @@ function onLayer(align: 'up' | 'down' | 'top' | 'bottom') {
         </div>
       </div>
       <p class="panel-title">元素列表:</p>
-      <div class="my-4 flex flex-col gap-4">
+      <div class="my-4 flex max-h-[400px] flex-col gap-4 overflow-y-auto">
         <div
           class="flex items-center justify-between rounded-md border border-[#3b3b4f] p-2"
           v-for="(item, index) in elementList"

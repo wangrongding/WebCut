@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import movie from '/bird.mp4'
 import emitter from '~/utils/bus'
 
 const onFileChange = (e: Event) => {
@@ -18,6 +17,14 @@ function addElement(url: string) {
 }
 
 const imgList = [
+  'https://daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.jpg',
+  'https://daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.jpg',
+  'https://daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.jpg',
+  'https://daisyui.com/images/stock/photo-1494253109108-2e30c049369b.jpg',
+  'https://daisyui.com/images/stock/photo-1559181567-c3190ca9959b.jpg',
+  'https://daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.jpg',
+  'https://daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.jpg',
+  'https://daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.jpg',
   'https://daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.jpg',
   'https://daisyui.com/images/stock/photo-1494253109108-2e30c049369b.jpg',
   'https://daisyui.com/images/stock/photo-1559181567-c3190ca9959b.jpg',
@@ -34,7 +41,7 @@ const imgList = [
       @change="onFileChange"
     />
     <p>图片素材：（开发中）</p>
-    <div class="grid grid-cols-2 gap-2">
+    <div class="grid max-h-[calc(100vh-200px)] grid-cols-2 gap-2 overflow-y-auto">
       <img
         :src="item"
         class="image-item relative cursor-pointer rounded-md"

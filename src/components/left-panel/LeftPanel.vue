@@ -10,7 +10,7 @@ const setActiveType = (id: ActiveType) => {
 }
 </script>
 <template>
-  <div class="left-box flex w-[400px] bg-[#272836]">
+  <div class="left-box flex max-h-[calc(100vh-50px)] w-[400px] overflow-y-hidden bg-[#272836]">
     <div class="flex w-[60px] flex-col items-center bg-[#1c1c26]">
       <div
         v-for="(item, index) in typeList"
