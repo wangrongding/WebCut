@@ -8,8 +8,10 @@ type Events = {
   'element:delete': fabric.Object // 删除元素
   // 添加元素
   'element:add': {
-    value: string // 图片地址 url | 视频地址 url | 文本内容 | SVG ...
-    type: string // 元素类型
+    // 元素类型 image | text | svg | gif | music
+    type: 'video' | 'image' | 'text' | 'svg' | 'gif' | 'music'
+    // 素材的 url 地址，如果是 text 类型则是文本内容
+    value: string
   }
   'element:align': 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' // 对齐方式
   'video:skip': number // 跳转视频

@@ -4,11 +4,11 @@ interface GetThumbnailBySeekOptions {
   clipStart?: number // 裁剪开始时间
   clipEnd?: number // 裁剪结束时间
 }
+
 // 通过 video + canvas 对视频进行抽帧
 export async function getThumbnailBySeek(options: GetThumbnailBySeekOptions) {
   const { url, interval, clipStart, clipEnd } = options
   const video = document.createElement('video')
-  // video.src = 'https://assets.fedtop.com/picbed/movie.mp4'
   video.src = url
   video.crossOrigin = 'anonymous' // 跨域, 防止污染
   video.preload = 'auto' // 不加会导致黑屏
@@ -50,6 +50,7 @@ export async function getThumbnailBySeek(options: GetThumbnailBySeekOptions) {
   })
 }
 
+// 格式化时间
 export function formatSeconds(seconds: number) {
   seconds = Math.floor(seconds)
   const hours = Math.floor(seconds / 3600)
@@ -60,6 +61,47 @@ export function formatSeconds(seconds: number) {
   return formattedTime
 }
 
+// 补零
 export function padZero(number: number) {
   return number.toString().padStart(2, '0')
+}
+
+// 事件禁用
+export function disableEvent() {
+  // 禁止右键菜单
+  document.oncontextmenu = () => false
+  // onselectstart事件禁用网页上选取的内容
+  document.onselectstart = () => false
+  // 禁止缩放
+  document.addEventListener(
+    'mousewheel',
+    (event: Event) => {
+      // 如果是ctrl + 滚轮，阻止默认事件
+      if ((event as WheelEvent).ctrlKey) event.preventDefault()
+    },
+    {
+      capture: false, // 是否在捕获阶段执行
+      passive: false // 是否是一个被动的监听器
+    }
+  )
+
+  // 禁用浏览器ctrl +- 缩放
+  const keyCodeMap = [
+    91, // command
+    61,
+    107, // 数字键盘 +
+    109, // 数字键盘 -
+    173, // 火狐 - 号
+    187, // +
+    189 // -
+  ]
+  // 覆盖ctrl||command + ‘+’/‘-’
+  document.onkeydown = function (event) {
+    const e = event || window.event
+    const ctrlKey = e.ctrlKey || e.metaKey
+    const keyCode = e.keyCode || e.which || e.charCode
+    if (ctrlKey && keyCode in keyCodeMap) {
+      e.preventDefault()
+    }
+  }
 }

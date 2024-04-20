@@ -5,45 +5,9 @@ import BottomPanel from '~/components/bottom-panel/BottomPanel.vue'
 import LeftPanel from '~/components/left-panel/LeftPanel.vue'
 import CanvasPlayer from '~/components/player/CanvasPlayer.vue'
 import RightPanel from '~/components/right-panel/RightPanel.vue'
+import { disableEvent } from '~/utils'
 
-onMounted(() => {
-  // 禁止右键菜单
-  document.oncontextmenu = () => false
-  // onselectstart事件禁用网页上选取的内容
-  document.onselectstart = () => false
-  // 禁止缩放
-  document.addEventListener(
-    'mousewheel',
-    (event: Event) => {
-      // 如果是ctrl + 滚轮，阻止默认事件
-      if ((event as WheelEvent).ctrlKey) event.preventDefault()
-    },
-    {
-      capture: false, // 是否在捕获阶段执行
-      passive: false // 是否是一个被动的监听器
-    }
-  )
-
-  // 禁用浏览器ctrl +- 缩放
-  const keyCodeMap = [
-    91, // command
-    61,
-    107, // 数字键盘 +
-    109, // 数字键盘 -
-    173, // 火狐 - 号
-    187, // +
-    189 // -
-  ]
-  // 覆盖ctrl||command + ‘+’/‘-’
-  document.onkeydown = function (event) {
-    const e = event || window.event
-    const ctrlKey = e.ctrlKey || e.metaKey
-    const keyCode = e.keyCode || e.which || e.charCode
-    if (ctrlKey && keyCode in keyCodeMap) {
-      e.preventDefault()
-    }
-  }
-})
+onMounted(disableEvent)
 </script>
 
 <template>
