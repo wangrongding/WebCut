@@ -21,6 +21,7 @@ import IconAlignRight from '~/assets/icons/icon-align-right.svg?component'
 import IconAlignTop from '~/assets/icons/icon-align-top.svg?component'
 import IconAlignMiddle from '~/assets/icons/icon-align-middle.svg?component'
 import IconAlignBottom from '~/assets/icons/icon-align-bottom.svg?component'
+import IconImage from '~/assets/icons/icon-image.svg?component'
 
 export {
   IconExport,
@@ -28,6 +29,7 @@ export {
   IconMusic,
   IconText,
   IconVideo,
+  IconImage,
   IconCopy,
   IconCut,
   IconDelete,

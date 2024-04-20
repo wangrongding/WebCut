@@ -109,6 +109,9 @@ function onAdd({ type, value }: { type: string; value: string }) {
     case 'video':
       drawVideo(value)
       break
+    case 'image':
+      addImage(value)
+      break
     case 'svg':
       addSVG(value)
       break
@@ -323,6 +326,21 @@ async function drawVideo(url: string) {
 
   videoRef.addEventListener('timeupdate', () => {
     currentTime.value = videoRef.currentTime
+  })
+}
+
+// 添加图片
+function addImage(url: string) {
+  fabric.Image.fromURL(url, (img) => {
+    const scale = 0.5
+    img.set({
+      scaleX: scale,
+      scaleY: scale,
+      left: canvas.width! / 2 - (img.width! * scale) / 2,
+      top: canvas.height! / 2 - (img.height! * scale) / 2,
+      angle: 0
+    })
+    canvas.add(img)
   })
 }
 

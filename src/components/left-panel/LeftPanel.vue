@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import VideoList from './VideoList.vue'
-import { typeList } from './typeList'
+import ImageList from './ImageList.vue'
+import { typeList, ActiveType } from './typeList'
 import { ref } from 'vue'
 
-const activeType = ref(1)
-const setActiveType = (id: number) => {
+const activeType = ref(ActiveType.Video)
+const setActiveType = (id: ActiveType) => {
   activeType.value = id
 }
 </script>
@@ -15,7 +16,7 @@ const setActiveType = (id: number) => {
         v-for="(item, index) in typeList"
         @click="setActiveType(item.id)"
         :key="index"
-        class="flex h-[60px] w-[60px] cursor-pointer select-none flex-col items-center justify-center text-sm text-[#ababc0] hover:bg-[#272836] hover:text-[white]"
+        class="flex h-[60px] w-[60px] cursor-pointer select-none flex-col items-center justify-center gap-1 text-sm text-[#ababc0] hover:bg-[#272836] hover:text-[white]"
         :class="{ 'bg-[#272836] text-[white]': activeType === item.id }"
       >
         <component :is="item.icon" />
@@ -23,7 +24,8 @@ const setActiveType = (id: number) => {
       </div>
     </div>
     <div class="flex-1 p-4 text-white">
-      <VideoList />
+      <VideoList v-if="activeType === ActiveType.Video" />
+      <ImageList v-if="activeType === ActiveType.Image" />
     </div>
   </div>
 </template>

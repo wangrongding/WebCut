@@ -1,33 +1,42 @@
-import { IconVideo, IconText, IconMusic } from '~/assets/icons/index'
+import { IconVideo, IconText, IconMusic, IconImage } from '~/assets/icons/index'
+
+export enum ActiveType {
+  Video = 1,
+  Audio = 2,
+  Text = 3,
+  Image = 4,
+  SVG = 5,
+  GIF = 6
+}
 
 export const typeList = [
   {
-    id: 1,
+    id: ActiveType.Video,
     name: '视频',
     icon: IconVideo
   },
   {
-    id: 2,
+    id: ActiveType.Audio,
     name: '音频',
     icon: IconMusic
   },
   {
-    id: 3,
+    id: ActiveType.Text,
     name: '文字',
     icon: IconText
   },
   {
-    id: 4,
+    id: ActiveType.Image,
     name: '图片',
-    icon: IconVideo
+    icon: IconImage
   },
   {
-    id: 5,
+    id: ActiveType.SVG,
     name: 'SVG',
     icon: IconVideo
   },
   {
-    id: 6,
+    id: ActiveType.GIF,
     name: 'GIF'
   }
 ]

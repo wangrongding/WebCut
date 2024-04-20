@@ -1,5 +1,5 @@
 import type { fabric } from 'fabric'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const usePlayerStore = defineStore('playerStore', () => {
@@ -22,3 +22,5 @@ export const usePlayerStore = defineStore('playerStore', () => {
 
   return { playStatus, togglePlay, playList, trackCount, currentTime, duration, elementList }
 })
+
+export const usePlayerStoreWithRefs = () => storeToRefs(usePlayerStore())
