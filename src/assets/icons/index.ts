@@ -1,51 +1,28 @@
-import IconCopy from '~/assets/icons/control-copy.svg?component'
-import IconCut from '~/assets/icons/control-cut.svg?component'
-import IconDelete from '~/assets/icons/control-delete.svg?component'
-import IconNext from '~/assets/icons/control-next.svg?component'
-import IconPause from '~/assets/icons/control-pause.svg?component'
-import IconPlay from '~/assets/icons/control-play.svg?component'
-import IconPrev from '~/assets/icons/control-prev.svg?component'
-import IconRedo from '~/assets/icons/control-redo.svg?component'
-import IconUndo from '~/assets/icons/control-undo.svg?component'
-import IconZoomin from '~/assets/icons/control-zoomin.svg?component'
-import IconZoomout from '~/assets/icons/control-zoomout.svg?component'
-import IconZoomToFit from '~/assets/icons/control-zoomtofit.svg?component'
-import IconExport from '~/assets/icons/icon-export.svg?component'
-import IconGithub from '~/assets/icons/icon-github.svg?component'
-import IconMusic from '~/assets/icons/icon-music.svg?component'
-import IconText from '~/assets/icons/icon-text.svg?component'
-import IconVideo from '~/assets/icons/icon-video.svg?component'
-import IconAlignLeft from '~/assets/icons/icon-align-left.svg?component'
-import IconAlignCenter from '~/assets/icons/icon-align-center.svg?component'
-import IconAlignRight from '~/assets/icons/icon-align-right.svg?component'
-import IconAlignTop from '~/assets/icons/icon-align-top.svg?component'
-import IconAlignMiddle from '~/assets/icons/icon-align-middle.svg?component'
-import IconAlignBottom from '~/assets/icons/icon-align-bottom.svg?component'
-import IconImage from '~/assets/icons/icon-image.svg?component'
-
-export {
-  IconExport,
-  IconGithub,
-  IconMusic,
-  IconText,
-  IconVideo,
-  IconImage,
-  IconCopy,
-  IconCut,
-  IconDelete,
-  IconNext,
-  IconPause,
-  IconPlay,
-  IconPrev,
-  IconRedo,
-  IconUndo,
-  IconZoomin,
-  IconZoomout,
-  IconZoomToFit,
-  IconAlignLeft,
-  IconAlignCenter,
-  IconAlignRight,
-  IconAlignTop,
-  IconAlignMiddle,
-  IconAlignBottom
-}
+export { default as IconCopy } from '~/assets/icons/control-copy.svg?component'
+export { default as IconCut } from '~/assets/icons/control-cut.svg?component'
+export { default as IconDelete } from '~/assets/icons/control-delete.svg?component'
+export { default as IconNext } from '~/assets/icons/control-next.svg?component'
+export { default as IconPause } from '~/assets/icons/control-pause.svg?component'
+export { default as IconPlay } from '~/assets/icons/control-play.svg?component'
+export { default as IconPrev } from '~/assets/icons/control-prev.svg?component'
+export { default as IconRedo } from '~/assets/icons/control-redo.svg?component'
+export { default as IconUndo } from '~/assets/icons/control-undo.svg?component'
+export { default as IconZoomin } from '~/assets/icons/control-zoomin.svg?component'
+export { default as IconZoomout } from '~/assets/icons/control-zoomout.svg?component'
+export { default as IconZoomToFit } from '~/assets/icons/control-zoomtofit.svg?component'
+export { default as IconExport } from '~/assets/icons/icon-export.svg?component'
+export { default as IconGithub } from '~/assets/icons/icon-github.svg?component'
+export { default as IconMusic } from '~/assets/icons/icon-music.svg?component'
+export { default as IconText } from '~/assets/icons/icon-text.svg?component'
+export { default as IconVideo } from '~/assets/icons/icon-video.svg?component'
+export { default as IconAlignLeft } from '~/assets/icons/icon-align-left.svg?component'
+export { default as IconAlignCenter } from '~/assets/icons/icon-align-center.svg?component'
+export { default as IconAlignRight } from '~/assets/icons/icon-align-right.svg?component'
+export { default as IconAlignTop } from '~/assets/icons/icon-align-top.svg?component'
+export { default as IconAlignMiddle } from '~/assets/icons/icon-align-middle.svg?component'
+export { default as IconAlignBottom } from '~/assets/icons/icon-align-bottom.svg?component'
+export { default as IconImage } from '~/assets/icons/icon-image.svg?component'
+export { default as IconLayerUp } from '~/assets/icons/icon-layer-up.svg?component'
+export { default as IconLayerDown } from '~/assets/icons/icon-layer-down.svg?component'
+export { default as IconLayerTop } from '~/assets/icons/icon-layer-top.svg?component'
+export { default as IconLayerBottom } from '~/assets/icons/icon-layer-bottom.svg?component'

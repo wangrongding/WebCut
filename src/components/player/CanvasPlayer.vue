@@ -29,8 +29,8 @@ const menuList = [
   { key: 'flipX', shortkey: 'Del', text: '删除', callback: onDelete },
   { key: 'flipY', shortkey: '⌘+]', text: '上移一层', callback: () => setElementLayer('up') },
   { key: 'flipY', shortkey: '⌘+[', text: '下移一层', callback: () => setElementLayer('down') },
-  { key: 'flipY', shortkey: '', text: '置于顶层', callback: () => {} },
-  { key: 'flipY', shortkey: '', text: '置于底层', callback: () => {} },
+  { key: 'flipY', shortkey: '', text: '置于顶层', callback: () => setElementLayer('top') },
+  { key: 'flipY', shortkey: '', text: '置于底层', callback: () => setElementLayer('bottom') },
   { key: 'flipX', shortkey: '', text: '旋转90°', callback: rotate },
   { key: 'flipX', shortkey: '', text: '左右翻转', callback: () => flip('x') },
   { key: 'flipY', shortkey: '', text: '垂直翻转', callback: () => flip('y') }
@@ -40,7 +40,8 @@ emitter.on('element:copy', onCopy)
 emitter.on('element:paste', onPaste)
 emitter.on('element:delete', onDelete)
 emitter.on('element:add', onAdd)
-emitter.on('element:align', onAlign)
+emitter.on('element:align', setElementAlign)
+emitter.on('element:layer', setElementLayer)
 emitter.on('canvas:fullscreen', toggleCanvasFullScreen)
 emitter.on('video:skip', (time: number) => (videoRef.currentTime += time))
 
@@ -255,12 +256,9 @@ function changeSize(value: number) {
 }
 
 // 水平居中选中元素
-function onAlign(align: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') {
+function setElementAlign(align: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') {
   let activeObj = canvas.getActiveObject()
   if (!activeObj) return
-
-  // canvas.viewportCenterObject(rect) // 画布水平垂直居中
-  // canvas.renderAll()
   switch (align) {
     case 'center':
       activeObj.centerH()
@@ -283,6 +281,7 @@ function onAlign(align: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom
     default:
       break
   }
+  // canvas.viewportCenterObject(activeObj) // 画布水平垂直居中
   canvas.renderAll()
 }
 

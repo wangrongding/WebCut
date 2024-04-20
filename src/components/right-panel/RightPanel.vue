@@ -8,13 +8,16 @@ import {
   IconAlignRight,
   IconAlignTop,
   IconAlignMiddle,
-  IconAlignBottom
+  IconAlignBottom,
+  IconLayerTop,
+  IconLayerBottom,
+  IconLayerUp,
+  IconLayerDown
 } from '~/assets/icons/index'
-import { usePlayerStore } from '~/stores/player'
+import { usePlayerStoreWithRefs } from '~/stores/player'
 import emitter from '~/utils/bus'
 
-const playerStore = usePlayerStore()
-const { elementList } = storeToRefs(playerStore)
+const { elementList } = usePlayerStoreWithRefs()
 
 function onDelete(item: fabric.Object) {
   emitter.emit('element:delete', item)
@@ -23,11 +26,34 @@ function onDelete(item: fabric.Object) {
 function onAlign(align: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') {
   emitter.emit('element:align', align)
 }
+
+function onLayer(align: 'up' | 'down' | 'top' | 'bottom') {
+  emitter.emit('element:layer', align)
+}
 </script>
 <template>
   <div class="right-panel flex w-[400px] justify-between bg-[#272836] text-white">
     <div class="w-full p-4">
-      <p class="font-bold leading-6">对齐方式:</p>
+      <p class="panel-title">元素层级:</p>
+      <div class="my-2 grid grid-cols-2 gap-4">
+        <div class="layer-btn" @click="onLayer('up')">
+          <IconLayerUp fill="white" />
+          <span>上移一层</span>
+        </div>
+        <div class="layer-btn" @click="onLayer('down')">
+          <IconLayerDown fill="white" />
+          <span>下移一层</span>
+        </div>
+        <div class="layer-btn" @click="onLayer('top')">
+          <IconLayerTop fill="white" />
+          <span>置于顶层</span>
+        </div>
+        <div class="layer-btn" @click="onLayer('bottom')">
+          <IconLayerBottom fill="white" />
+          <span>置于底层</span>
+        </div>
+      </div>
+      <p class="panel-title">对齐方式:</p>
       <div class="flex h-[40px] items-center justify-between gap-4">
         <div class="position-btn" @click="onAlign('left')">
           <IconAlignLeft fill="white" />
@@ -48,7 +74,7 @@ function onAlign(align: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom
           <IconAlignBottom fill="white" />
         </div>
       </div>
-      <p class="font-bold leading-6">元素列表:</p>
+      <p class="panel-title">元素列表:</p>
       <div class="my-4 flex flex-col gap-4">
         <div
           class="flex items-center justify-between rounded-md border border-[#3b3b4f] p-2"
@@ -66,7 +92,13 @@ function onAlign(align: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom
   </div>
 </template>
 <style lang="scss" scoped>
+.panel-title {
+  @apply font-bold leading-6;
+}
 .position-btn {
   @apply flex h-[30px] w-[30px] items-center justify-center rounded-md hover:bg-slate-400;
+}
+.layer-btn {
+  @apply flex w-[110px] cursor-pointer items-center justify-between rounded-md px-2 py-1 hover:bg-slate-400;
 }
 </style>
