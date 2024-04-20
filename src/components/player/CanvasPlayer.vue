@@ -26,11 +26,12 @@ let clipboard: fabric.Object | null = null
 const menuList = [
   { key: 'flipX', shortkey: '⌘+C', text: '复制', callback: onCopy },
   { key: 'flipX', shortkey: '⌘+V', text: '粘贴', callback: onPaste },
+  { key: 'flipX', shortkey: '⌘+X', text: '剪切', callback: onCut },
   { key: 'flipX', shortkey: 'Del', text: '删除', callback: onDelete },
   { key: 'flipY', shortkey: '⌘+]', text: '上移一层', callback: () => setElementLayer('up') },
   { key: 'flipY', shortkey: '⌘+[', text: '下移一层', callback: () => setElementLayer('down') },
-  { key: 'flipY', shortkey: '', text: '置于顶层', callback: () => {} },
-  { key: 'flipY', shortkey: '', text: '置于底层', callback: () => {} },
+  { key: 'flipY', shortkey: '', text: '置于顶层', callback: () => setElementLayer('top') },
+  { key: 'flipY', shortkey: '', text: '置于底层', callback: () => setElementLayer('bottom') },
   { key: 'flipX', shortkey: '', text: '旋转90°', callback: rotate },
   { key: 'flipX', shortkey: '', text: '左右翻转', callback: () => flip('x') },
   { key: 'flipY', shortkey: '', text: '垂直翻转', callback: () => flip('y') }
@@ -93,9 +94,8 @@ async function drawElements() {
 }
 
 // 删除元素
-// BUG 为啥删不了
 function onDelete(obj: fabric.Object) {
-  const activeObject = obj || canvas.getActiveObject()
+  const activeObject = obj instanceof fabric.Object ? obj : canvas.getActiveObject()
   if (!activeObject) return
   canvas.remove(activeObject)
   canvas.requestRenderAll()
@@ -519,8 +519,10 @@ onMounted((): void => {
       ref="contextMenu"
       :menuList="menuList"
       :style="{
-        top: contextMenuPosition.y + 'px',
-        left: contextMenuPosition.x + 'px'
+        top: Math.max(0, contextMenuPosition.y) + 'px',
+        left: contextMenuPosition.x + 'px',
+        maxHeight: '100%',
+        overflow: 'auto'
       }"
       class="context-menu"
     />
