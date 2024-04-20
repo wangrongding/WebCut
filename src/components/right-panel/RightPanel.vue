@@ -35,7 +35,7 @@ function onLayer(align: 'up' | 'down' | 'top' | 'bottom') {
   <div class="right-panel flex w-[400px] justify-between bg-[#272836] text-white">
     <div class="w-full p-4">
       <p class="panel-title">元素层级:</p>
-      <div class="my-2 grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-2 gap-4 rounded-md bg-[#1c1c26] p-2">
         <div class="layer-btn" @click="onLayer('up')">
           <IconLayerUp fill="white" />
           <span>上移一层</span>
@@ -54,7 +54,7 @@ function onLayer(align: 'up' | 'down' | 'top' | 'bottom') {
         </div>
       </div>
       <p class="panel-title">对齐方式:</p>
-      <div class="flex h-[40px] items-center justify-between gap-4">
+      <div class="flex h-[40px] items-center justify-between gap-4 rounded-md bg-[#1c1c26] p-2">
         <div class="position-btn" @click="onAlign('left')">
           <IconAlignLeft fill="white" />
         </div>
@@ -75,7 +75,7 @@ function onLayer(align: 'up' | 'down' | 'top' | 'bottom') {
         </div>
       </div>
       <p class="panel-title">元素列表:</p>
-      <div class="my-4 flex max-h-[400px] flex-col gap-4 overflow-y-auto">
+      <div class="flex max-h-[400px] flex-col gap-4 overflow-y-auto rounded-md bg-[#1c1c26] p-2">
         <div
           class="flex items-center justify-between rounded-md border border-[#3b3b4f] p-2"
           v-for="(item, index) in elementList"
@@ -93,7 +93,7 @@ function onLayer(align: 'up' | 'down' | 'top' | 'bottom') {
 </template>
 <style lang="scss" scoped>
 .panel-title {
-  @apply font-bold leading-6;
+  @apply my-2 font-black leading-6;
 }
 .position-btn {
   @apply flex h-[30px] w-[30px] items-center justify-center rounded-md hover:bg-slate-400;
