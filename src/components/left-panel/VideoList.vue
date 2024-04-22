@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import movie from '/bird.mp4'
 import { ref } from 'vue'
-import emitter from '~/utils/bus'
+import emitter, { BusEvent } from '~/utils/eventBus'
 
 const onFileChange = (e: Event) => {
   const target = e.target as HTMLInputElement
@@ -13,7 +13,7 @@ const onFileChange = (e: Event) => {
 
 // 添加视频素材
 function addVideo(url: string) {
-  emitter.emit('element:add', {
+  emitter.emit(BusEvent.ElementAdd, {
     type: 'video',
     value: url
   })

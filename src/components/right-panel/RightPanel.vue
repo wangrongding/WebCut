@@ -15,20 +15,20 @@ import {
   IconLayerDown
 } from '~/assets/icons/index'
 import { usePlayerStoreWithRefs } from '~/stores/player'
-import emitter from '~/utils/bus'
+import emitter, { BusEvent } from '~/utils/eventBus'
 
 const { elementList } = usePlayerStoreWithRefs()
 
 function onDelete(item: fabric.Object) {
-  emitter.emit('element:delete', item)
+  emitter.emit(BusEvent.ElementDelete, item)
 }
 
 function onAlign(align: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') {
-  emitter.emit('element:align', align)
+  emitter.emit(BusEvent.ElementAlign, align)
 }
 
 function onLayer(align: 'up' | 'down' | 'top' | 'bottom') {
-  emitter.emit('element:layer', align)
+  emitter.emit(BusEvent.ElementLayer, align)
 }
 </script>
 <template>

@@ -16,7 +16,7 @@ import {
   IconZoomout
 } from '~/assets/icons/index'
 import { usePlayerStore } from '~/stores/player'
-import emitter from '~/utils/bus'
+import emitter, { BusEvent } from '~/utils/eventBus'
 import { formatSeconds } from '~/utils/index'
 
 const playerStore = usePlayerStore()
@@ -24,10 +24,10 @@ const playerStore = usePlayerStore()
 const { playStatus, currentTime, duration } = storeToRefs(playerStore)
 
 function skipVideo(time: number) {
-  emitter.emit('video:skip', time)
+  emitter.emit(BusEvent.VideoSkip, time)
 }
 function toggleCanvasFullScreen() {
-  emitter.emit('canvas:fullscreen')
+  emitter.emit(BusEvent.CanvasFullScreen, true)
 }
 </script>
 <template>

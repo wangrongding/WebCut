@@ -6,7 +6,7 @@ import { storeToRefs } from 'pinia'
 import { onMounted, ref, watch } from 'vue'
 import Logo from '~/assets/icons/icon-github.svg'
 import { usePlayerStore } from '~/stores/player'
-import emitter from '~/utils/bus'
+import emitter, { BusEvent } from '~/utils/eventBus'
 
 defineProps<{
   msg: string
@@ -36,14 +36,14 @@ const menuList = [
   { key: 'flipY', shortkey: '', text: '垂直翻转', callback: () => flip('y') }
 ]
 
-emitter.on('element:copy', onCopy)
-emitter.on('element:paste', onPaste)
-emitter.on('element:delete', onDelete)
-emitter.on('element:add', onAdd)
-emitter.on('element:align', setElementAlign)
-emitter.on('element:layer', setElementLayer)
-emitter.on('canvas:fullscreen', toggleCanvasFullScreen)
-emitter.on('video:skip', (time: number) => (videoRef.currentTime += time))
+emitter.on(BusEvent.ElementCopy, onCopy)
+emitter.on(BusEvent.ElementPaste, onPaste)
+emitter.on(BusEvent.ElementDelete, onDelete)
+emitter.on(BusEvent.ElementAdd, onAdd)
+emitter.on(BusEvent.ElementAlign, setElementAlign)
+emitter.on(BusEvent.ElementLayer, setElementLayer)
+emitter.on(BusEvent.CanvasFullScreen, toggleCanvasFullScreen)
+emitter.on(BusEvent.VideoSkip, (time: number) => (videoRef.currentTime += time))
 
 watch(playStatus, (v) => videoRef[v ? 'play' : 'pause']())
 

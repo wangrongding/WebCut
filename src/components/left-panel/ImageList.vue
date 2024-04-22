@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import emitter from '~/utils/bus'
+import emitter, { BusEvent } from '~/utils/eventBus'
 
 const onFileChange = (e: Event) => {
   const target = e.target as HTMLInputElement
@@ -10,7 +10,7 @@ const onFileChange = (e: Event) => {
 }
 
 function addElement(url: string) {
-  emitter.emit('element:add', {
+  emitter.emit(BusEvent.ElementAdd, {
     type: 'image',
     value: url
   })
