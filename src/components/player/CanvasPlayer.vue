@@ -7,6 +7,7 @@ import { onMounted, ref, watch } from 'vue'
 import Logo from '~/assets/icons/icon-github.svg'
 import { usePlayerStore } from '~/stores/player'
 import emitter, { BusEvent } from '~/utils/eventBus'
+import { initFabricControlCustomStyle } from './customFabricControl'
 
 defineProps<{
   msg: string
@@ -22,6 +23,7 @@ const contextMenu = ref<typeof ContextMenu | null>(null)
 let canvas: fabric.Canvas
 let ctx: CanvasRenderingContext2D
 let clipboard: fabric.Object | null = null
+initFabricControlCustomStyle() // 初始化 fabric 控件自定义样式
 
 const menuList = [
   { key: 'flipX', shortkey: '⌘+C', text: '复制', callback: onCopy },
