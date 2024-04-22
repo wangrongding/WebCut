@@ -19,5 +19,10 @@ export default defineConfig({
     alias: {
       '~': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    port: 3000,
+    open: true,
+    host: '0.0.0.0'
   }
 })
