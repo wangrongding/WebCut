@@ -6,12 +6,17 @@ import LeftPanel from '~/components/left-panel/LeftPanel.vue'
 import CanvasPlayer from '~/components/player/CanvasPlayer.vue'
 import RightPanel from '~/components/right-panel/RightPanel.vue'
 import { disableEvent } from '~/utils'
+import emitter, { BusEvent } from '~/utils/eventBus'
 
+// 导出当前帧
+const exportCurrentFrame = () => {
+  emitter.emit(BusEvent.CanvasExportCurrentFrame)
+}
 onMounted(disableEvent)
 </script>
 
 <template>
-  <div class="main flex h-full flex-col gap-[1px] bg-[#2c2d3c]">
+  <div class="main flex h-full min-w-[1300px] flex-col gap-[1px] bg-[#2c2d3c]">
     <!-- 头部 -->
     <header class="flex h-[50px] items-center justify-between bg-[#1c1c26] px-6">
       <div class="flex items-center gap-2">
@@ -29,7 +34,10 @@ onMounted(disableEvent)
           <IconGithub class="h-[20px] w-[20px]" />
         </a>
 
-        <!-- Open the modal using ID.showModal() method -->
+        <button class="btn btn-sm" @click="exportCurrentFrame">
+          <IconExport />
+          导出当前帧
+        </button>
         <button class="btn btn-sm" onclick="testModal.showModal()">
           <IconExport />
           导出
@@ -37,11 +45,12 @@ onMounted(disableEvent)
         <dialog id="testModal" class="modal">
           <div class="modal-box">
             <h3 class="text-lg font-bold">Hello!</h3>
-            <p class="py-4">敬请期待，功能正在开发中...</p>
+            <p class="py-4">视频导出正在开发中...</p>
+            <p class="py-4">您可以先选择导出当前帧为 png</p>
             <div class="modal-action">
               <form method="dialog">
-                <!-- if there is a button in form, it will close the modal -->
-                <button class="btn">Close</button>
+                <button class="btn btn-success mx-2">导出当前帧</button>
+                <button class="btn mx-2">Close</button>
               </form>
             </div>
           </div>

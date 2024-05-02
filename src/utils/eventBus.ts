@@ -11,6 +11,7 @@ export enum BusEvent {
   ElementFlip = 'element:flip',
   ElementLayer = 'element:layer',
   VideoSkip = 'video:skip',
+  CanvasExportCurrentFrame = 'canvas:export-current-frame',
   CanvasFullScreen = 'canvas:fullscreen'
 }
 
@@ -39,6 +40,8 @@ type BusEvents = {
   // 视频跳转
   [BusEvent.VideoSkip]: number
   // ============================= canvas =============================
+  // 导出当前帧
+  [BusEvent.CanvasExportCurrentFrame]: void
   // 全屏
   [BusEvent.CanvasFullScreen]: boolean
 }
