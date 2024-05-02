@@ -46,6 +46,7 @@ emitter.on(BusEvent.ElementAdd, onAdd)
 emitter.on(BusEvent.ElementAlign, setElementAlign)
 emitter.on(BusEvent.ElementLayer, setElementLayer)
 emitter.on(BusEvent.CanvasFullScreen, toggleCanvasFullScreen)
+emitter.on(BusEvent.CanvasExportCurrentFrame, onExportCurrentFrame)
 emitter.on(BusEvent.VideoSkip, (time: number) => (videoRef.currentTime += time))
 
 watch(playStatus, (v) => videoRef[v ? 'play' : 'pause']())
@@ -164,6 +165,7 @@ async function drawVideo(url: string) {
   videoRef.src = url
   videoRef.loop = true
   videoRef.preload = 'auto' // 不加会导致未播放时元素黑屏
+  videoRef.crossOrigin = 'anonymous' // 跨域的视频会污染画布，导致无法导出
 
   await new Promise<void>((resolve) => {
     videoRef.addEventListener('loadedmetadata', () => {
@@ -403,6 +405,23 @@ function toggleCanvasFullScreen(fullscreen?: boolean) {
   } else if (document.fullscreenElement && !fullscreen) {
     document.exitFullscreen()
   }
+}
+
+// 导出图片
+function onExportCurrentFrame() {
+  const dataURL = canvas.toDataURL({
+    width: canvas.width,
+    height: canvas.height,
+    left: 0,
+    top: 0,
+    format: 'png'
+  })
+  const link = document.createElement('a')
+  link.download = 'canvas.png'
+  link.href = dataURL
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 // 复制元素
