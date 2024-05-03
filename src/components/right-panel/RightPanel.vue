@@ -12,20 +12,24 @@ import {
   IconLayerUp,
   IconLayerDown,
 } from '~/assets/icons/index'
+import { computed } from 'vue'
 import { usePlayerStoreWithRefs, type ElementItem } from '~/stores/player'
 import emitter, { BusEvent } from '~/utils/eventBus'
 
-const { elementList } = usePlayerStoreWithRefs()
+const { elementList, focusElements } = usePlayerStoreWithRefs()
+const focusElementIds = computed(() => {
+  return focusElements.value.map((item) => item.elementId)
+})
 
-function onDelete(item: ElementItem) {
+function deleteElement(item: ElementItem) {
   emitter.emit(BusEvent.ElementDelete, item)
 }
 
-function onAlign(align: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') {
+function setAlign(align: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') {
   emitter.emit(BusEvent.ElementAlign, align)
 }
 
-function onLayer(align: 'up' | 'down' | 'top' | 'bottom') {
+function setLayer(align: 'up' | 'down' | 'top' | 'bottom') {
   emitter.emit(BusEvent.ElementLayer, align)
 }
 </script>
@@ -34,41 +38,41 @@ function onLayer(align: 'up' | 'down' | 'top' | 'bottom') {
     <div class="w-full p-4">
       <p class="panel-title">元素层级:</p>
       <div class="grid grid-cols-2 gap-4 rounded-md bg-[#1c1c26] p-2">
-        <div class="layer-btn" @click="onLayer('up')">
+        <div class="layer-btn" @click="setLayer('up')">
           <IconLayerUp fill="white" />
           <span>上移一层</span>
         </div>
-        <div class="layer-btn" @click="onLayer('down')">
+        <div class="layer-btn" @click="setLayer('down')">
           <IconLayerDown fill="white" />
           <span>下移一层</span>
         </div>
-        <div class="layer-btn" @click="onLayer('top')">
+        <div class="layer-btn" @click="setLayer('top')">
           <IconLayerTop fill="white" />
           <span>置于顶层</span>
         </div>
-        <div class="layer-btn" @click="onLayer('bottom')">
+        <div class="layer-btn" @click="setLayer('bottom')">
           <IconLayerBottom fill="white" />
           <span>置于底层</span>
         </div>
       </div>
       <p class="panel-title">对齐方式:</p>
       <div class="flex h-[40px] items-center justify-between gap-4 rounded-md bg-[#1c1c26] p-2">
-        <div class="position-btn" @click="onAlign('left')">
+        <div class="position-btn" @click="setAlign('left')">
           <IconAlignLeft fill="white" />
         </div>
-        <div class="position-btn" @click="onAlign('center')">
+        <div class="position-btn" @click="setAlign('center')">
           <IconAlignCenter fill="white" />
         </div>
-        <div class="position-btn" @click="onAlign('right')">
+        <div class="position-btn" @click="setAlign('right')">
           <IconAlignRight fill="white" />
         </div>
-        <div class="position-btn" @click="onAlign('top')">
+        <div class="position-btn" @click="setAlign('top')">
           <IconAlignTop fill="white" />
         </div>
-        <div class="position-btn" @click="onAlign('middle')">
+        <div class="position-btn" @click="setAlign('middle')">
           <IconAlignMiddle fill="white" />
         </div>
-        <div class="position-btn" @click="onAlign('bottom')">
+        <div class="position-btn" @click="setAlign('bottom')">
           <IconAlignBottom fill="white" />
         </div>
       </div>
@@ -80,11 +84,12 @@ function onLayer(align: 'up' | 'down' | 'top' | 'bottom') {
         >
           <div
             class="flex items-center justify-between rounded-md border border-[#3b3b4f] p-2"
+            :class="focusElementIds.includes(item.elementId) ? 'bg-black' : ''"
             v-for="(item, index) in elementList"
             :key="index"
           >
-            <p class="m-0 h-[16px] p-0 leading-[16px]">{{ item.type }} - {{ index + 1 }}</p>
-            <button class="btn btn-error btn-sm" @click="onDelete(item)">
+            <p class="m-0 h-[16px] p-0 leading-[16px]">{{ item.elementType }} - {{ index + 1 }}</p>
+            <button class="btn btn-error btn-sm" @click="deleteElement(item)">
               <IconDelete fill="white" />
             </button>
           </div>

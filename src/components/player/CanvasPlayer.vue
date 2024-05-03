@@ -8,7 +8,7 @@ import Logo from '~/assets/icons/icon-github.svg'
 import { usePlayerStore, type ElementItem } from '~/stores/player'
 import emitter, { BusEvent } from '~/utils/eventBus'
 import { initFabricControlCustomStyle } from './customFabricControl'
-import { nanoid } from 'nanoid'
+import { registerHotkey } from './operate'
 
 defineProps<{
   msg: string
@@ -17,7 +17,7 @@ const container = ref<HTMLElement | null>(null)
 let videoRef: HTMLVideoElement
 let canvasRef: HTMLCanvasElement
 const playerStore = usePlayerStore()
-const { togglePlay, addElement, removeElement } = playerStore
+const { togglePlay, addElement, removeElement, setFocusElements } = playerStore
 const { playStatus, currentTime, duration, elementList } = storeToRefs(playerStore)
 const menuShow = ref(false)
 const contextMenuPosition = ref({ x: 0, y: 0 })
@@ -47,6 +47,7 @@ emitter.on(BusEvent.ElementDelete, onDelete)
 emitter.on(BusEvent.ElementAdd, onAdd)
 emitter.on(BusEvent.ElementAlign, setElementAlign)
 emitter.on(BusEvent.ElementLayer, setElementLayer)
+emitter.on(BusEvent.ElementSelectAll, selectAll)
 emitter.on(BusEvent.CanvasFullScreen, toggleCanvasFullScreen)
 emitter.on(BusEvent.CanvasExportCurrentFrame, onExportCurrentFrame)
 emitter.on(BusEvent.VideoSkip, (time: number) => (videoRef.currentTime += time))
@@ -76,17 +77,17 @@ function initCanvas() {
 
 // 初始化 Canvas 事件
 function initCanvasEvent() {
+  // 画布鼠标按下事件
   canvas.on('mouse:down', canvasOnMouseDown)
+  // 选中元素时
+  canvas.on('selection:created', onElementSelected)
+  canvas.on('selection:updated', onElementSelected)
+  // 取消选中元素时
+  canvas.on('selection:cleared', onElementDeselected)
   // 目标移动中
-  canvas.on('object:moving', (e) => {
-    if (!e.target) return
-    e.target.opacity = 0.5
-  })
+  canvas.on('object:moving', onElementMoving)
   // 目标修改后
-  canvas.on('object:modified', (e) => {
-    if (!e.target) return
-    e.target.opacity = 1
-  })
+  canvas.on('object:modified', onElementModified)
 }
 
 // 绘制元素
@@ -100,14 +101,16 @@ async function drawElements() {
 }
 
 // 删除元素
-function onDelete(obj: ElementItem) {
-  const { element, id } = toRaw(obj)
-  const activeObject = element instanceof fabric.Object ? element : null
+function onDelete(obj: ElementItem | void) {
+  const targetElement: ElementItem | null = obj ? toRaw(obj) : canvas.getActiveObject()
+  if (!targetElement) return
+  const { elementId } = targetElement
+  const activeObject = targetElement instanceof fabric.Object ? targetElement : null
   if (!activeObject) return
   canvas.remove(activeObject)
   canvas.requestRenderAll()
   if (menuShow.value) menuShow.value = false
-  removeElement(id)
+  elementId && removeElement(elementId)
 }
 
 // 添加元素
@@ -125,6 +128,9 @@ function onAdd({ type, value }: { type: string; value: string }) {
       break
     case 'text':
       addText(value)
+      break
+    case 'rect':
+      addRect()
       break
     default:
       break
@@ -146,6 +152,19 @@ function addSVG(url: string) {
     canvas.add(svgElement)
     addElement('svg', svgElement)
   })
+}
+
+// 绘制矩形
+function addRect() {
+  const rectElement = new fabric.Rect({
+    left: canvas.width! / 2,
+    top: canvas.height! / 2,
+    fill: 'red',
+    width: 100,
+    height: 100,
+  })
+  canvas.add(rectElement)
+  addElement('svg', rectElement)
 }
 
 // 添加文字
@@ -201,8 +220,8 @@ async function drawVideo(url: string) {
   canvas.add(videoElement)
   continuouslyRepaint()
   duration.value = videoRef.duration
-  canvas.setActiveObject(videoElement)
   addElement('video', videoElement)
+  canvas.setActiveObject(videoElement)
 
   videoRef.addEventListener('timeupdate', () => {
     currentTime.value = videoRef.currentTime
@@ -227,8 +246,8 @@ function addImage(url: string) {
       angle: 0,
     })
     canvas.add(imgElement)
-    canvas.setActiveObject(imgElement)
     addElement('image', imgElement)
+    canvas.setActiveObject(imgElement)
   })
 }
 
@@ -405,6 +424,7 @@ function setElementLayer(type: 'up' | 'down' | 'top' | 'bottom') {
   menuShow.value = false
 }
 
+// 切换画布全屏
 function toggleCanvasFullScreen(fullscreen?: boolean) {
   if (fullscreen === undefined) {
     if (document.fullscreenElement) {
@@ -552,9 +572,42 @@ function canvasOnMouseDown(e: fabric.IEvent<MouseEvent>) {
   }
 }
 
+// 全选
+function selectAll() {
+  canvas.discardActiveObject()
+  const sel = new fabric.ActiveSelection(canvas.getObjects(), {
+    canvas: canvas,
+  })
+  canvas.setActiveObject(sel)
+  canvas.requestRenderAll()
+}
+
+// 元素选中时
+function onElementSelected(e: fabric.IEvent<MouseEvent>) {
+  setFocusElements(e.selected, undefined)
+}
+
+// 元素取消选中时
+function onElementDeselected(e: fabric.IEvent<MouseEvent>) {
+  setFocusElements(undefined, e.deselected)
+}
+
+// 元素移动时
+function onElementMoving(e: fabric.IEvent<MouseEvent>) {
+  if (!e.target) return
+  e.target.opacity = 0.5
+}
+
+// 元素修改后
+function onElementModified(e: fabric.IEvent<MouseEvent>) {
+  if (!e.target) return
+  e.target.opacity = 1
+}
 onMounted((): void => {
   // 初始化画布
   initCanvas()
+  // 注册快捷键
+  registerHotkey()
 
   // oncopy事件禁用复制;
   document.oncopy = onCopy

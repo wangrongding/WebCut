@@ -7,8 +7,8 @@ export function initFabricControlCustomStyle() {
     borderColor: '#fff', // 控制边框颜色
     cornerColor: '#fff', // 控制控件颜色
     cornerStrokeColor: '#fff', // 控制控件边框颜色
-    cornerSize: 10, // 控制控件大小
+    cornerSize: 14, // 控制控件大小
     cornerStyle: 'circle', // 控制控件形状
-    transparentCorners: false // 控制控件是否透明
+    transparentCorners: false, // 控制控件是否透明
   })
 }
