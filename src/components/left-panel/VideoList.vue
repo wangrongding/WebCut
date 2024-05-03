@@ -15,7 +15,7 @@ const onFileChange = (e: Event) => {
 function addVideo(url: string) {
   emitter.emit(BusEvent.ElementAdd, {
     type: 'video',
-    value: url
+    value: url,
   })
 }
 
@@ -35,13 +35,11 @@ const pause = (e: MouseEvent) => {
 // https://pixabay.com/videos/
 const videoList = [
   movie,
-  'https://videos.pexels.com/video-files/6278954/6278954-uhd_2160_3840_30fps.mp4',
-  'https://videos.pexels.com/video-files/4068362/4068362-uhd_4096_2160_25fps.mp4',
-  'https://videos.pexels.com/video-files/15921892/15921892-uhd_3840_2160_50fps.mp4',
-  'https://videos.pexels.com/video-files/20497210/20497210-sd_640_360_25fps.mp4',
   'https://cdn.pixabay.com/video/2024/04/28/209762_large.mp4',
   'https://cdn.pixabay.com/video/2024/04/29/209898_large.mp4',
-  'https://cdn.pixabay.com/video/2024/04/23/209108_large.mp4'
+  'https://cdn.pixabay.com/video/2024/04/23/209108_large.mp4',
+  'https://cdn.pixabay.com/video/2023/10/27/186714-878826932_large.mp4',
+  'https://cdn.pixabay.com/video/2024/04/17/208314_large.mp4',
 ]
 </script>
 <template>
