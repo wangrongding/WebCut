@@ -81,8 +81,8 @@ export function disableEvent() {
     },
     {
       capture: false, // 是否在捕获阶段执行
-      passive: false // 是否是一个被动的监听器
-    }
+      passive: false, // 是否是一个被动的监听器
+    },
   )
 
   // 禁用浏览器ctrl +- 缩放
@@ -93,7 +93,7 @@ export function disableEvent() {
     109, // 数字键盘 -
     173, // 火狐 - 号
     187, // +
-    189 // -
+    189, // -
   ]
   // 覆盖ctrl||command + ‘+’/‘-’
   document.onkeydown = function (event) {

@@ -12,7 +12,7 @@ defineProps<{ menuList: Menu[] }>()
 const contextMenu = ref<HTMLElement | null>(null)
 
 defineExpose({
-  contextMenu
+  contextMenu,
 })
 </script>
 <template>

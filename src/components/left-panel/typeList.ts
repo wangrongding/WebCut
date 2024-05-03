@@ -6,37 +6,37 @@ export enum ActiveType {
   Audio = 3,
   Text = 4,
   SVG = 5,
-  GIF = 6
+  GIF = 6,
 }
 
 export const typeList = [
   {
     id: ActiveType.Video,
     name: '视频',
-    icon: IconVideo
+    icon: IconVideo,
   },
   {
     id: ActiveType.Image,
     name: '图片',
-    icon: IconImage
+    icon: IconImage,
   },
   {
     id: ActiveType.Audio,
     name: '音频',
-    icon: IconMusic
+    icon: IconMusic,
   },
   {
     id: ActiveType.Text,
     name: '文字',
-    icon: IconText
+    icon: IconText,
   },
   {
     id: ActiveType.SVG,
     name: 'SVG',
-    icon: IconVideo
+    icon: IconVideo,
   },
   {
     id: ActiveType.GIF,
-    name: 'GIF'
-  }
+    name: 'GIF',
+  },
 ]

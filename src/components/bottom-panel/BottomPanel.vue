@@ -13,7 +13,7 @@ import {
   IconUndo,
   IconZoomToFit,
   IconZoomin,
-  IconZoomout
+  IconZoomout,
 } from '~/assets/icons/index'
 import { usePlayerStore } from '~/stores/player'
 import emitter, { BusEvent } from '~/utils/eventBus'

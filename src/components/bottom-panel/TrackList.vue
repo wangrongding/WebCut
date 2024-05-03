@@ -11,8 +11,8 @@ const videoTrackList = computed<GetThumbnailBySeekOptions[]>(() => {
       url: movie,
       count: 5,
       clipStart: 0,
-      clipEnd: 10
-    }
+      clipEnd: 10,
+    },
   ]
 })
 </script>
