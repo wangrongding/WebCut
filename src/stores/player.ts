@@ -1,12 +1,12 @@
 import type { fabric } from 'fabric'
 import { defineStore, storeToRefs } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, type Ref } from 'vue'
+import { nanoid } from 'nanoid'
 
 type ElementTypes = 'text' | 'image' | 'video' | 'svg' | 'audio'
-export interface ElementItem {
-  id: string
-  type: ElementTypes
-  element: fabric.Object
+export interface ElementItem extends fabric.Object {
+  elementId?: string
+  elementType?: ElementTypes
 }
 export type ElementList = ElementItem[]
 
@@ -16,9 +16,11 @@ export const usePlayerStore = defineStore('playerStore', () => {
   // 播放列表
   const playList = ref<string[]>([])
   // 轨道数
-  const trackCount = computed(() => playList.value.length)
+  const trackCount = computed<number>(() => playList.value.length)
   // 元素列表
-  const elementList = ref<ElementList>([])
+  const elementList: Ref<ElementList> = ref([])
+  // 当前选中的元素
+  const focusElements: Ref<ElementList> = ref([])
   // 当前时间
   const currentTime = ref<number>(0)
   // 总时长
@@ -30,12 +32,27 @@ export const usePlayerStore = defineStore('playerStore', () => {
   }
   // 添加元素
   function addElement(type: ElementTypes, element: fabric.Object) {
-    elementList.value.push({ id: String(Date.now()), element, type })
+    Object.assign(element, { elementId: nanoid(), elementType: type })
+    elementList.value.push(element as ElementItem)
   }
   // 删除元素
-  function removeElement(id: string) {
-    const index = elementList.value.findIndex((item) => item.id === id)
+  function removeElement(elementId: string) {
+    const index = elementList.value.findIndex((item) => item.elementId === elementId)
     if (index !== -1) elementList.value.splice(index, 1)
+  }
+  // 设置当前元素
+  function setFocusElements(
+    selected: ElementList | undefined,
+    deselected: ElementList | undefined,
+  ) {
+    if (selected) {
+      focusElements.value = [...focusElements.value, ...selected]
+    } else if (deselected) {
+      const elementId = deselected.map((item) => item.elementId || '')
+      focusElements.value = focusElements.value.filter(
+        (item) => !elementId.includes(item.elementId || ''),
+      )
+    }
   }
 
   return {
@@ -45,9 +62,11 @@ export const usePlayerStore = defineStore('playerStore', () => {
     currentTime,
     duration,
     elementList,
+    focusElements,
     togglePlay,
     addElement,
     removeElement,
+    setFocusElements,
   }
 })
 
