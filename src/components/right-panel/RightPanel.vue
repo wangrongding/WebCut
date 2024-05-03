@@ -73,17 +73,23 @@ function onLayer(align: 'up' | 'down' | 'top' | 'bottom') {
         </div>
       </div>
       <p class="panel-title">元素列表:</p>
-      <div class="flex max-h-[400px] flex-col gap-4 overflow-y-auto rounded-md bg-[#1c1c26] p-2">
+      <div class="bg-[#1c1c26]">
         <div
-          class="flex items-center justify-between rounded-md border border-[#3b3b4f] p-2"
-          v-for="(item, index) in elementList"
-          :key="index"
+          class="flex max-h-[400px] flex-col gap-4 overflow-y-auto rounded-md p-2"
+          v-if="elementList.length > 0"
         >
-          <p class="m-0 h-[16px] p-0 leading-[16px]">{{ item.type }} - {{ index + 1 }}</p>
-          <button class="btn btn-error btn-sm" @click="onDelete(item)">
-            <IconDelete fill="white" />
-          </button>
+          <div
+            class="flex items-center justify-between rounded-md border border-[#3b3b4f] p-2"
+            v-for="(item, index) in elementList"
+            :key="index"
+          >
+            <p class="m-0 h-[16px] p-0 leading-[16px]">{{ item.type }} - {{ index + 1 }}</p>
+            <button class="btn btn-error btn-sm" @click="onDelete(item)">
+              <IconDelete fill="white" />
+            </button>
+          </div>
         </div>
+        <div v-else><p class="m-0 max-h-[400px] rounded-md p-2 text-center">暂无元素</p></div>
       </div>
     </div>
     <div class="w-[60px] bg-[#1c1c26] p-8"></div>
