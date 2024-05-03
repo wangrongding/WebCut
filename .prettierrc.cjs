@@ -3,7 +3,7 @@
  */
 module.exports = {
   plugins: [
-    require.resolve('prettier-plugin-tailwindcss') // 必须放在最后
+    require.resolve('prettier-plugin-tailwindcss'), // 必须放在最后
   ],
   importOrderSeparation: true,
   tailwindConfig: './tailwind.config.js',
@@ -12,7 +12,7 @@ module.exports = {
   tabWidth: 2, // 空格数
   singleQuote: true, // 是否使用单引号
   printWidth: 100, // 换行的宽度
-  trailingComma: 'none', // 多行时尽可能打印尾随逗号 |all|es5|none
+  trailingComma: 'all', // 多行时尽可能打印尾随逗号 |all|es5|none
   useTabs: false, // 是否开启tab
   quoteProps: 'as-needed', // 对象的key仅在需要时用引号 as-needed|consistent|preserve
   bracketSpacing: true, // 对象文字中的括号之间打印空格
@@ -24,6 +24,6 @@ module.exports = {
   embeddedLanguageFormatting: 'auto', // 是否格式化内嵌的代码块
   vueIndentScriptAndStyle: false, // vue中script与style里的第一条语句是否空格
   singleAttributePerLine: false, // 每行强制单个属性
-  bracketSameLine: false // 将HTML元素的闭括号放在最后一行的末尾（不适用于自闭合元素）。
+  bracketSameLine: false, // 将HTML元素的闭括号放在最后一行的末尾（不适用于自闭合元素）。
   // rangeStart: 0, // 每个文件格式化的范围是文件的全部内容
 }
