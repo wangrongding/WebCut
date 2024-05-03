@@ -3,11 +3,12 @@ import ContextMenu from './ContextMenu.vue'
 import movie from '/bird.mp4'
 import { fabric } from 'fabric'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, toRaw, watch } from 'vue'
 import Logo from '~/assets/icons/icon-github.svg'
-import { usePlayerStore } from '~/stores/player'
+import { usePlayerStore, type ElementItem } from '~/stores/player'
 import emitter, { BusEvent } from '~/utils/eventBus'
 import { initFabricControlCustomStyle } from './customFabricControl'
+import { nanoid } from 'nanoid'
 
 defineProps<{
   msg: string
@@ -16,7 +17,8 @@ const container = ref<HTMLElement | null>(null)
 let videoRef: HTMLVideoElement
 let canvasRef: HTMLCanvasElement
 const playerStore = usePlayerStore()
-const { playStatus, currentTime, duration } = storeToRefs(playerStore)
+const { togglePlay, addElement, removeElement } = playerStore
+const { playStatus, currentTime, duration, elementList } = storeToRefs(playerStore)
 const menuShow = ref(false)
 const contextMenuPosition = ref({ x: 0, y: 0 })
 const contextMenu = ref<typeof ContextMenu | null>(null)
@@ -36,7 +38,7 @@ const menuList = [
   { key: 'flipY', shortkey: '', text: '置于底层', callback: () => setElementLayer('bottom') },
   { key: 'flipX', shortkey: '', text: '旋转90°', callback: rotate },
   { key: 'flipX', shortkey: '', text: '左右翻转', callback: () => flip('x') },
-  { key: 'flipY', shortkey: '', text: '垂直翻转', callback: () => flip('y') }
+  { key: 'flipY', shortkey: '', text: '垂直翻转', callback: () => flip('y') },
 ]
 
 emitter.on(BusEvent.ElementCopy, onCopy)
@@ -63,7 +65,7 @@ function initCanvas() {
     selectionBorderColor: 'red', // 选中边框颜色
     selectionLineWidth: 2, // 选中边框宽度
     selectionDashArray: [10], // 选中边框虚线
-    selectionFullyContained: true // 精准选择(不包含空白区域，真正选中图形才算选中 )
+    selectionFullyContained: true, // 精准选择(不包含空白区域，真正选中图形才算选中 )
   })
   canvasRef = canvas.getElement()
   ctx = canvas.getContext()
@@ -98,12 +100,14 @@ async function drawElements() {
 }
 
 // 删除元素
-function onDelete(obj: fabric.Object) {
-  const activeObject = obj instanceof fabric.Object ? obj : canvas.getActiveObject()
+function onDelete(obj: ElementItem) {
+  const { element, id } = toRaw(obj)
+  const activeObject = element instanceof fabric.Object ? element : null
   if (!activeObject) return
   canvas.remove(activeObject)
   canvas.requestRenderAll()
-  menuShow.value = false
+  if (menuShow.value) menuShow.value = false
+  removeElement(id)
 }
 
 // 添加元素
@@ -130,32 +134,34 @@ function onAdd({ type, value }: { type: string; value: string }) {
 // 绘制 svg
 function addSVG(url: string) {
   fabric.loadSVGFromURL(url, (objects, options) => {
-    const obj = fabric.util.groupSVGElements(objects, options)
+    const svgElement = fabric.util.groupSVGElements(objects, options)
     const scale = 5
-    obj.set({
+    svgElement.set({
       scaleX: scale,
       scaleY: scale,
-      left: canvas.width! / 2 - (obj.width! * scale) / 2,
-      top: canvas.height! / 2 - (obj.height! * scale) / 2,
-      angle: 0
+      left: canvas.width! / 2 - (svgElement.width! * scale) / 2,
+      top: canvas.height! / 2 - (svgElement.height! * scale) / 2,
+      angle: 0,
     })
-    canvas.add(obj)
+    canvas.add(svgElement)
+    addElement('svg', svgElement)
   })
 }
 
 // 添加文字
-function addText(text: string, options?: fabric.ITextboxOptions) {
-  const textElement = new fabric.Textbox(text, {
+function addText(val: string, options?: fabric.ITextboxOptions) {
+  const textElement = new fabric.Textbox(val, {
     left: canvas.width! / 2,
     top: canvas.height! / 2,
     fill: 'white',
     fontSize: 20,
-    ...options
+    ...options,
     // fontStyle: 'italic', // 整体斜体
     // splitByGrapheme: true // 自动换行
   })
   // textElement.splitByGrapheme = true // 自动换行
   canvas.add(textElement)
+  addElement('text', textElement)
 }
 
 // 绘制视频
@@ -190,12 +196,13 @@ async function drawVideo(url: string) {
     top: canvasHeight / 2 - (videoHeight * scale) / 2,
     angle: 0,
     originX: 'left',
-    originY: 'top'
+    originY: 'top',
   })
   canvas.add(videoElement)
   continuouslyRepaint()
   duration.value = videoRef.duration
   canvas.setActiveObject(videoElement)
+  addElement('video', videoElement)
 
   videoRef.addEventListener('timeupdate', () => {
     currentTime.value = videoRef.currentTime
@@ -205,18 +212,23 @@ async function drawVideo(url: string) {
 // 添加图片
 function addImage(url: string) {
   const activeObject = canvas.getActiveObject()
-  fabric.Image.fromURL(url, (img) => {
+  fabric.Image.fromURL(url, (imgElement) => {
     const scale = 0.5
-    img.set({
+    imgElement.set({
       scaleX: scale,
       scaleY: scale,
       // 存在选中元素时，以选中元素为基准添加图片，否则以画布中心为基准
-      left: activeObject ? activeObject.left! + 30 : canvas.width! / 2 - (img.width! * scale) / 2,
-      top: activeObject ? activeObject.top! + 30 : canvas.height! / 2 - (img.height! * scale) / 2,
-      angle: 0
+      left: activeObject
+        ? activeObject.left! + 30
+        : canvas.width! / 2 - (imgElement.width! * scale) / 2,
+      top: activeObject
+        ? activeObject.top! + 30
+        : canvas.height! / 2 - (imgElement.height! * scale) / 2,
+      angle: 0,
     })
-    canvas.add(img)
-    canvas.setActiveObject(img)
+    canvas.add(imgElement)
+    canvas.setActiveObject(imgElement)
+    addElement('image', imgElement)
   })
 }
 
@@ -362,7 +374,7 @@ function resizePlayer() {
   const height = container.value!.clientHeight
   canvas.setDimensions({
     width,
-    height
+    height,
   })
 }
 
@@ -414,7 +426,7 @@ function onExportCurrentFrame() {
     height: canvas.height,
     left: 0,
     top: 0,
-    format: 'png'
+    format: 'png',
   })
   const link = document.createElement('a')
   link.download = 'canvas.png'
@@ -452,7 +464,7 @@ function onPaste() {
     clonedObj.set({
       left: clonedObj.left + 30,
       top: clonedObj.top + 30,
-      evented: true
+      evented: true,
     })
     if (clonedObj.type === 'activeSelection') {
       // active selection needs a reference to the canvas.
@@ -479,7 +491,7 @@ function flip(flipType: 'x' | 'y') {
   if (!activeObject) return
   const type = flipType === 'x' ? 'flipX' : 'flipY'
   activeObject.set({
-    [type]: !activeObject.get(type)
+    [type]: !activeObject.get(type),
   })
   canvas?.renderAll()
 }
@@ -492,7 +504,7 @@ function rotate() {
   activeObject.set({
     angle: activeObject.angle! + 90,
     originX: 'center',
-    originY: 'center'
+    originY: 'center',
   })
   canvas?.renderAll()
 }
@@ -563,7 +575,7 @@ onMounted((): void => {
         top: Math.max(0, contextMenuPosition.y) + 'px',
         left: contextMenuPosition.x + 'px',
         maxHeight: '100%',
-        overflow: 'auto'
+        overflow: 'auto',
       }"
       class="context-menu"
     />

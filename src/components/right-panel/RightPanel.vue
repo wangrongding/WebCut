@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { fabric } from 'fabric'
-import { storeToRefs } from 'pinia'
 import {
   IconDelete,
   IconAlignLeft,
@@ -12,14 +10,14 @@ import {
   IconLayerTop,
   IconLayerBottom,
   IconLayerUp,
-  IconLayerDown
+  IconLayerDown,
 } from '~/assets/icons/index'
-import { usePlayerStoreWithRefs } from '~/stores/player'
+import { usePlayerStoreWithRefs, type ElementItem } from '~/stores/player'
 import emitter, { BusEvent } from '~/utils/eventBus'
 
 const { elementList } = usePlayerStoreWithRefs()
 
-function onDelete(item: fabric.Object) {
+function onDelete(item: ElementItem) {
   emitter.emit(BusEvent.ElementDelete, item)
 }
 

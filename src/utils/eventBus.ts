@@ -1,6 +1,7 @@
 import type { fabric } from 'fabric'
 import mitt from 'mitt'
 import type { Emitter } from 'mitt'
+import type { ElementItem } from '~/stores/player'
 
 export enum BusEvent {
   ElementCopy = 'element:copy',
@@ -12,7 +13,7 @@ export enum BusEvent {
   ElementLayer = 'element:layer',
   VideoSkip = 'video:skip',
   CanvasExportCurrentFrame = 'canvas:export-current-frame',
-  CanvasFullScreen = 'canvas:fullscreen'
+  CanvasFullScreen = 'canvas:fullscreen',
 }
 
 type BusEvents = {
@@ -22,7 +23,7 @@ type BusEvents = {
   // 粘贴元素
   [BusEvent.ElementPaste]: void
   // 删除元素
-  [BusEvent.ElementDelete]: fabric.Object
+  [BusEvent.ElementDelete]: ElementItem
   // 添加元素
   [BusEvent.ElementAdd]: {
     // 元素类型 image | text | svg | gif | music
