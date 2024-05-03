@@ -83,10 +83,11 @@ function setLayer(align: 'up' | 'down' | 'top' | 'bottom') {
           v-if="elementList.length > 0"
         >
           <div
-            class="flex items-center justify-between rounded-md border border-[#3b3b4f] p-2"
+            class="flex cursor-pointer items-center justify-between rounded-md border border-[#3b3b4f] p-2"
             :class="focusElementIds.includes(item.elementId) ? 'bg-black' : ''"
             v-for="(item, index) in elementList"
             :key="index"
+            @click="emitter.emit(BusEvent.ElementSelect, item)"
           >
             <p class="m-0 h-[16px] p-0 leading-[16px]">{{ item.elementType }} - {{ index + 1 }}</p>
             <button class="btn btn-error btn-sm" @click="deleteElement(item)">

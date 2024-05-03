@@ -47,6 +47,7 @@ emitter.on(BusEvent.ElementDelete, onDelete)
 emitter.on(BusEvent.ElementAdd, onAdd)
 emitter.on(BusEvent.ElementAlign, setElementAlign)
 emitter.on(BusEvent.ElementLayer, setElementLayer)
+emitter.on(BusEvent.ElementSelect, selectElement)
 emitter.on(BusEvent.ElementSelectAll, selectAll)
 emitter.on(BusEvent.CanvasFullScreen, toggleCanvasFullScreen)
 emitter.on(BusEvent.CanvasExportCurrentFrame, onExportCurrentFrame)
@@ -572,6 +573,16 @@ function canvasOnMouseDown(e: fabric.IEvent<MouseEvent>) {
   }
 }
 
+// 选中元素
+function selectElement(obj: ElementItem) {
+  const targetElement: ElementItem = canvas
+    .getObjects()
+    .find((item: ElementItem) => item.elementId === obj.elementId)!
+  if (!targetElement) return
+  canvas.setActiveObject(targetElement)
+  canvas.requestRenderAll()
+}
+
 // 全选
 function selectAll() {
   canvas.discardActiveObject()
@@ -584,7 +595,7 @@ function selectAll() {
 
 // 元素选中时
 function onElementSelected(e: fabric.IEvent<MouseEvent>) {
-  setFocusElements(e.selected, undefined)
+  setFocusElements(e.selected, e.deselected)
 }
 
 // 元素取消选中时

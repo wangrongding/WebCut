@@ -45,12 +45,11 @@ export const usePlayerStore = defineStore('playerStore', () => {
     selected: ElementList | undefined,
     deselected: ElementList | undefined,
   ) {
-    if (selected) {
-      focusElements.value = [...focusElements.value, ...selected]
-    } else if (deselected) {
-      const elementId = deselected.map((item) => item.elementId || '')
+    if (selected) focusElements.value.push(...selected)
+    if (deselected) {
+      const deselectedElementId = deselected.map((item) => item.elementId || '')
       focusElements.value = focusElements.value.filter(
-        (item) => !elementId.includes(item.elementId || ''),
+        (item) => !deselectedElementId.includes(item.elementId || ''),
       )
     }
   }

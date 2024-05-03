@@ -1,3 +1,4 @@
+import { fabric } from 'fabric'
 import mitt from 'mitt'
 import type { Emitter } from 'mitt'
 import type { ElementItem } from '~/stores/player'
@@ -7,6 +8,7 @@ export enum BusEvent {
   ElementPaste = 'element:paste',
   ElementDelete = 'element:delete',
   ElementAdd = 'element:add',
+  ElementSelect = 'element:select',
   ElementSelectAll = 'element:select-all',
   ElementAlign = 'element:align',
   ElementFlip = 'element:flip',
@@ -37,6 +39,8 @@ type BusEvents = {
   [BusEvent.ElementFlip]: 'x' | 'y'
   // 元素层级
   [BusEvent.ElementLayer]: 'up' | 'down' | 'top' | 'bottom'
+  // 选中元素
+  [BusEvent.ElementSelect]: fabric.Object
   // 全选
   [BusEvent.ElementSelectAll]: void
   // ============================= video =============================
